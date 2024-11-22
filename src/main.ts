@@ -9,6 +9,11 @@ document.querySelector("[data-handler='create-text']")?.addEventListener("click"
   parent.postMessage("create-text", "*");
 });
 
+document.querySelector("[data-handler='remove-interactions']")?.addEventListener("click", () => {
+  // send message to plugin.ts
+  parent.postMessage("remove-interactions", "*");
+});
+
 // Listen plugin.ts messages
 window.addEventListener("message", (event) => {
   if (event.data.source === "penpot") {

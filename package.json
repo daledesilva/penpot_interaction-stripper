@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "@penpot/plugin-styles": "1.0.0",
-    "@penpot/plugin-types": "1.0.0"
+    "@penpot/plugin-types": "1.0.0",
+    "text-encoding": "^0.7.0"
   },
   "devDependencies": {
     "typescript": "^5.2.2",
