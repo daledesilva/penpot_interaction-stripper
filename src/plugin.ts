@@ -1,10 +1,13 @@
 import { Shape } from "@penpot/plugin-types";
-import { TextDecoder } from 'text-encoding';
+// import { TextDecoder } from 'text-encoding';
 
 ///////////
 ///////////
 
-penpot.ui.open("Interaction Stripper", `?theme=${penpot.theme}`);
+penpot.ui.open("Interaction Stripper", `?theme=${penpot.theme}`, {
+  width: 350,
+  height: 400,
+});
 
 penpot.ui.onMessage<string>((message) => {
   if (message === "create-text") {
