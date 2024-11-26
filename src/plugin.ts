@@ -1,4 +1,5 @@
 import { Shape } from "@penpot/plugin-types";
+import { filterToInteractions } from "./logic/filter-to-interactions";
 // import { TextDecoder } from 'text-encoding';
 
 ///////////
@@ -34,6 +35,12 @@ penpot.ui.onMessage<string>((message) => {
 
     resizeOrClose();
 
+  }
+
+  if (message === "filter-to-interactions") {
+    const shapesWithInteractions = filterToInteractions(penpot.selection);
+    penpot.selection = shapesWithInteractions;
+    console.log('shapesWithInteractions', shapesWithInteractions);
   }
 
 });
