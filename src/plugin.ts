@@ -1,5 +1,7 @@
 import { Shape } from "@penpot/plugin-types";
-import { filterToInteractions } from "./logic/filter-to-interactions";
+import { filterToHasInteractions } from "./logic/filter-to-has-interactions";
+import { filterToComponents } from "./logic/filter-to-components";
+import { filterToNonComponents } from "./logic/filter-to-non-components";
 // import { TextDecoder } from 'text-encoding';
 
 ///////////
@@ -38,9 +40,21 @@ penpot.ui.onMessage<string>((message) => {
   }
 
   if (message === "filter-to-interactions") {
-    const shapesWithInteractions = filterToInteractions(penpot.selection);
+    const shapesWithInteractions = filterToHasInteractions(penpot.selection);
     penpot.selection = shapesWithInteractions;
     console.log('shapesWithInteractions', shapesWithInteractions);
+  }
+
+  if (message === "filter-to-components") {
+    const components = filterToComponents(penpot.selection);
+    penpot.selection = components;
+    console.log('components', components);
+  }
+
+  if (message === "filter-to-non-components") {
+    const nonComponents = filterToNonComponents(penpot.selection);
+    penpot.selection = nonComponents;
+    console.log('nonComponents', nonComponents);
   }
 
 });

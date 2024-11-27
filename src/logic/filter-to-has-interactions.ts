@@ -3,8 +3,7 @@ import { Board, Group, Shape } from "@penpot/plugin-types";
 //////////////
 //////////////
 
-export function filterToInteractions(shapes: Shape[]): Shape[] {
-
+export function filterToHasInteractions(shapes: Shape[]): Shape[] {
     const shapesWithInteractions: Shape[] = [];
 
     shapes.forEach( (shape) => {
@@ -16,11 +15,11 @@ export function filterToInteractions(shapes: Shape[]): Shape[] {
         // If it contains other shapes, recursively check it's children
         if(penpot.utils.types.isBoard(shape)) {
             const board = shape as Board;
-            const childShapesWithInteractions = filterToInteractions(board.children);
+            const childShapesWithInteractions = filterToHasInteractions(board.children);
             shapesWithInteractions.push(...childShapesWithInteractions);
         } else if(penpot.utils.types.isGroup(shape)) {
             const group = shape as Group;
-            const childShapesWithInteractions = filterToInteractions(group.children);
+            const childShapesWithInteractions = filterToHasInteractions(group.children);
             shapesWithInteractions.push(...childShapesWithInteractions);
         }
     })

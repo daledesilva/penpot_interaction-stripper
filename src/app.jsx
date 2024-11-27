@@ -8,11 +8,29 @@ function App() {
         <div>
             <h1>Select an object to begin...</h1>
             {/* <p>This is a simple React application.</p> */}
-            <button
-                onClick = {() => parent.postMessage("filter-to-interactions", "*")}
-            >
-                Filter to interactions
-            </button>
+
+            <div>
+                <button
+                    onClick = {() => parent.postMessage("filter-to-interactions", "*")}
+                >
+                    Filter to interactions
+                </button>
+            </div>
+            <div>
+                <button
+                    onClick = {() => parent.postMessage("filter-to-components", "*")}
+                >
+                    Filter to components
+                </button>
+            </div>
+            <div>
+                <button
+                    onClick = {() => parent.postMessage("filter-to-non-components", "*")}
+                >
+                    Filter to non-components
+                </button>
+            </div>
+
         </div>
     );
 }
