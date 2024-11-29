@@ -30,7 +30,7 @@ function App() {
                     Filter to non-components
                 </button>
             </div>
-            <div>
+            {/* <div>
                 <button
                     onClick = {() => parent.postMessage("filter-to-missing-interactions", "*")}
                 >
@@ -43,7 +43,7 @@ function App() {
                 >
                     Filter to added interactions
                 </button>
-            </div>
+            </div> */}
 
         </div>
     );
