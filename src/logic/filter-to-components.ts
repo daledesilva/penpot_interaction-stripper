@@ -8,6 +8,7 @@ export function filterToComponents(shapes: Shape[]): Shape[] {
 
     shapes.forEach( (shape) => {
 
+        // if shape is, or is inside, a library component instance
         if(shape.isComponentInstance()) {
             components.push(shape);
         }

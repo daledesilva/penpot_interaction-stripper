@@ -30,6 +30,13 @@ function App() {
                     Filter to non-components
                 </button>
             </div>
+            <div>
+                <button
+                    onClick = {() => parent.postMessage("filter-to-missing-interactions", "*")}
+                >
+                    Filter to missing interactions
+                </button>
+            </div>
 
         </div>
     );

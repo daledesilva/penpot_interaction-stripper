@@ -2,6 +2,7 @@ import { Shape } from "@penpot/plugin-types";
 import { filterToHasInteractions } from "./logic/filter-to-has-interactions";
 import { filterToComponents } from "./logic/filter-to-components";
 import { filterToNonComponents } from "./logic/filter-to-non-components";
+import { filterToMissingInteractions } from "./logic/filter-to-missing-interactions";
 // import { TextDecoder } from 'text-encoding';
 
 ///////////
@@ -55,6 +56,12 @@ penpot.ui.onMessage<string>((message) => {
     const nonComponents = filterToNonComponents(penpot.selection);
     penpot.selection = nonComponents;
     console.log('nonComponents', nonComponents);
+  }
+
+  if (message === "filter-to-missing-interactions") {
+    const missingInteractions = filterToMissingInteractions(penpot.selection);
+    penpot.selection = missingInteractions;
+    console.log('missingInteractions', missingInteractions);
   }
 
 });
