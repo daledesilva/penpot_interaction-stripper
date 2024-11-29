@@ -37,6 +37,13 @@ function App() {
                     Filter to missing interactions
                 </button>
             </div>
+            <div>
+                <button
+                    onClick = {() => parent.postMessage("filter-to-added-interactions", "*")}
+                >
+                    Filter to added interactions
+                </button>
+            </div>
 
         </div>
     );

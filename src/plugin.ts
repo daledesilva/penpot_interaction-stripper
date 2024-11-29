@@ -3,6 +3,7 @@ import { filterToHasInteractions } from "./logic/filter-to-has-interactions";
 import { filterToComponents } from "./logic/filter-to-components";
 import { filterToNonComponents } from "./logic/filter-to-non-components";
 import { filterToMissingInteractions } from "./logic/filter-to-missing-interactions";
+import { filterToAddedInteractions } from "./logic/filter-to-added-interactions";
 // import { TextDecoder } from 'text-encoding';
 
 ///////////
@@ -62,6 +63,12 @@ penpot.ui.onMessage<string>((message) => {
     const missingInteractions = filterToMissingInteractions(penpot.selection);
     penpot.selection = missingInteractions;
     console.log('missingInteractions', missingInteractions);
+  }
+
+  if (message === "filter-to-added-interactions") {
+    const addedInteractions = filterToAddedInteractions(penpot.selection);
+    penpot.selection = addedInteractions;
+    console.log('addedInteractions', addedInteractions);
   }
 
 });

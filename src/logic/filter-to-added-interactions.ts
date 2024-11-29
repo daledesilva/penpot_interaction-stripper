@@ -4,8 +4,8 @@ import { filterToComponents } from "./filter-to-components";
 //////////////
 //////////////
 
-export function filterToMissingInteractions(shapes: Shape[]): Shape[] {
-    const componentsWithMissingInteractions: Shape[] = [];
+export function filterToAddedInteractions(shapes: Shape[]): Shape[] {
+    const componentsWithAddedInteractions: Shape[] = [];
 
     const componentBasedShapes = filterToComponents(shapes);
 
@@ -15,10 +15,10 @@ export function filterToMissingInteractions(shapes: Shape[]): Shape[] {
         // If this is the main instance, there is no source to check against
         if(!sameShapeInMainInstance) return;
         
-        // If the number of interactions in the instance are less than the source.
+        // If the number of interactions in the instance are more than the source.
         // TODO: Should actually compare each one as the number might be the same but one might be added and one might be removed.
-        if(shape.interactions.length < sameShapeInMainInstance.interactions.length) {
-            componentsWithMissingInteractions.push(shape);
+        if(shape.interactions.length > sameShapeInMainInstance.interactions.length) {
+            componentsWithAddedInteractions.push(shape);
             return;
         }
 
@@ -35,5 +35,5 @@ export function filterToMissingInteractions(shapes: Shape[]): Shape[] {
         // }
     })
 
-    return componentsWithMissingInteractions;
+    return componentsWithAddedInteractions;
 }
