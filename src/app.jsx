@@ -52,6 +52,34 @@ function App() {
                     Remove interactions
                 </button>
             </div>
+            <div>
+                <button
+                    onClick = {() => parent.postMessage("remove-click-interactions", "*")}
+                >
+                    Remove click interactions
+                </button>
+            </div>
+            <div>
+                <button
+                    onClick = {() => parent.postMessage("remove-mouseenter-interactions", "*")}
+                >
+                    Remove mouse enter interactions
+                </button>
+            </div>
+            <div>
+                <button
+                    onClick = {() => parent.postMessage("remove-mouseleave-interactions", "*")}
+                >
+                    Remove mouse leave interactions
+                </button>
+            </div>
+            <div>
+                <button
+                    onClick = {() => parent.postMessage("remove-afterdelay-interactions", "*")}
+                >
+                    Remove after delay interactions
+                </button>
+            </div>
 
         </div>
     );

@@ -79,6 +79,26 @@ penpot.ui.onMessage<string>((message) => {
     removeInteractions(penpot.selection);
     penpot.history.undoBlockFinish(undoBlockId);
   }
+  if (message === "remove-click-interactions") {
+    const undoBlockId = penpot.history.undoBlockBegin();
+    removeInteractions(penpot.selection, {click:true});
+    penpot.history.undoBlockFinish(undoBlockId);
+  }
+  if (message === "remove-mouseenter-interactions") {
+    const undoBlockId = penpot.history.undoBlockBegin();
+    removeInteractions(penpot.selection, {mouseEnter:true});
+    penpot.history.undoBlockFinish(undoBlockId);
+  }
+  if (message === "remove-mouseleave-interactions") {
+    const undoBlockId = penpot.history.undoBlockBegin();
+    removeInteractions(penpot.selection, {mouseLeave:true});
+    penpot.history.undoBlockFinish(undoBlockId);
+  }
+  if (message === "remove-afterdelay-interactions") {
+    const undoBlockId = penpot.history.undoBlockBegin();
+    removeInteractions(penpot.selection, {afterDelay:true});
+    penpot.history.undoBlockFinish(undoBlockId);
+  }
 
 });
 
