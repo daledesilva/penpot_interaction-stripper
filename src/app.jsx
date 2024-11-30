@@ -44,6 +44,14 @@ function App() {
                     Filter to added interactions
                 </button>
             </div> */}
+            ---
+            <div>
+                <button
+                    onClick = {() => parent.postMessage("remove-interactions", "*")}
+                >
+                    Remove interactions
+                </button>
+            </div>
 
         </div>
     );

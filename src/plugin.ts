@@ -4,6 +4,7 @@ import { filterToComponents } from "./logic/filter-to-components";
 import { filterToNonComponents } from "./logic/filter-to-non-components";
 import { filterToMissingInteractions } from "./logic/filter-to-missing-interactions";
 import { filterToAddedInteractions } from "./logic/filter-to-added-interactions";
+import { removeInteractions } from "./logic/remove-interactions";
 // import { TextDecoder } from 'text-encoding';
 
 ///////////
@@ -26,7 +27,7 @@ penpot.ui.onMessage<string>((message) => {
     }
   }
 
-  if (message === "remove-interactions") {
+  if (message === "resize-or-close") {
 
     // penpot.selection.forEach( (shape) => {
     //   console.log('shape.component', shape.name);
@@ -69,6 +70,14 @@ penpot.ui.onMessage<string>((message) => {
     const addedInteractions = filterToAddedInteractions(penpot.selection);
     penpot.selection = addedInteractions;
     console.log('addedInteractions', addedInteractions);
+  }
+
+  ///////
+
+  if (message === "remove-interactions") {
+    const undoBlockId = penpot.history.undoBlockBegin();
+    removeInteractions(penpot.selection);
+    penpot.history.undoBlockFinish(undoBlockId);
   }
 
 });
