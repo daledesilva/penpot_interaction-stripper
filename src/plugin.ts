@@ -5,6 +5,7 @@ import { filterToNonComponents } from "./logic/filter-to-non-components";
 import { filterToMissingInteractions } from "./logic/filter-to-missing-interactions";
 import { filterToAddedInteractions } from "./logic/filter-to-added-interactions";
 import { removeInteractions } from "./logic/remove-interactions";
+import { filterToFlowShapes } from "./logic/filter-to-flow-shapes";
 // import { TextDecoder } from 'text-encoding';
 
 ///////////
@@ -70,6 +71,12 @@ penpot.ui.onMessage<string>((message) => {
     const addedInteractions = filterToAddedInteractions(penpot.selection);
     penpot.selection = addedInteractions;
     console.log('addedInteractions', addedInteractions);
+  }
+
+  if (message === "filter-to-flow-shapes") {
+    const flowShapes = filterToFlowShapes(penpot.selection);
+    penpot.selection = flowShapes;
+    console.log('flowShapes', flowShapes);
   }
 
   ///////
