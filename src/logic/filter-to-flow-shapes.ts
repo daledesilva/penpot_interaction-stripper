@@ -1,12 +1,11 @@
 
 import { Board, Group, Shape } from "@penpot/plugin-types";
-import { debug } from "../utils/log-to-console";
 
 //////////////
 //////////////
 
 export function filterToFlowShapes(_shapes: Shape[], _boards: Board[] = []): Shape[] {
-    const flowShapes: Shape[] = [];
+    let flowShapes: Shape[] = [];
     const boards: Board[] = [];
     if(_boards) boards.push(..._boards);
     
@@ -57,47 +56,21 @@ export function filterToFlowShapes(_shapes: Shape[], _boards: Board[] = []): Sha
         
         // Iterate through all shapes inside the shape
         if(penpot.utils.types.isBoard(shape)) {
+            // Components and any kind of layout is a board. Not like Figma where there are Frames.
             const board = shape as Board;
             flowShapes.push( ...filterToFlowShapes(board.children, boards) );
         } else if(penpot.utils.types.isGroup(shape)) {  // Does this return true for components?
             const group = shape as Group;
             flowShapes.push( ...filterToFlowShapes(group.children, boards) );
         }
-        // } else if(shape.componentHead() === shape) {
-        //     // It's the root of a component instance
-        //     const group = shape as Group;
-        //     flowShapes.push( ...filterToFlowShapes(group.children, boards) );
-        // }
-        // components?
     
     });
 
 
-    // TODO: remove duplicates in flowShapes
-
-
-    
-    debug(['boards', boards]);
-    debug(['flowShapes', flowShapes]);
+    // Remove duplicates
+    flowShapes = flowShapes.filter( (shape, index, self) => {
+        return index === self.findIndex( (t) => t.id === shape.id );
+    });
 
     return flowShapes;
 }
-
-
-// shapes.forEach( (shape) => {
-
-    //     if(!shape.isComponentInstance()) {
-    //         components.push(shape);
-    //     }
-
-    //     // If it contains other shapes, recursively check it's children
-    //     if(penpot.utils.types.isBoard(shape)) {
-    //         const board = shape as Board;
-    //         const childNonComponents = filterToNonComponents(board.children);
-    //         components.push(...childNonComponents);
-    //     } else if(penpot.utils.types.isGroup(shape)) {
-    //         const group = shape as Group;
-    //         const childNonComponents = filterToNonComponents(group.children);
-    //         components.push(...childNonComponents);
-    //     }
-    // })
