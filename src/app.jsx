@@ -37,6 +37,13 @@ function App() {
                     Filter to flow shapes
                 </button>
             </div>
+            <div>
+                <button
+                    onClick = {() => parent.postMessage("filter-to-non-flow-shapes", "*")}
+                >
+                    Filter to non-flow shapes
+                </button>
+            </div>
             {/* <div>
                 <button
                     onClick = {() => parent.postMessage("filter-to-missing-interactions", "*")}
