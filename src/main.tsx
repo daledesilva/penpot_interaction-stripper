@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './app.jsx';
+import App from './app.js';
 import "./style.css";
 
 //////////
@@ -21,5 +21,5 @@ window.addEventListener("message", (event) => {
 ////////
 ////////
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(<App />);

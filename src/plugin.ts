@@ -13,8 +13,8 @@ import { filterToNonFlowShapes } from "./logic/filter-to-non-flow-shapes";
 ///////////
 
 penpot.ui.open("Interaction Stripper", `?theme=${penpot.theme}`, {
-  width: 350,
-  height: 400,
+  width: 200,
+  height: 300,
 });
 
 penpot.ui.onMessage<string>((message) => {
