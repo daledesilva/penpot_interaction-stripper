@@ -4,13 +4,14 @@ import React, { FC, ReactNode } from 'react';
 ////////////////////////
 
 interface StepAccordionProps {
-    children?: ReactNode;
+    isDisabled?: boolean;
     title?: string;
     isOpen: boolean;
     onToggle: () => void;
+    children?: ReactNode;
 }
 
-const StepAccordion: FC<StepAccordionProps> = ({ children, title, isOpen, onToggle }) => {
+const StepAccordion: FC<StepAccordionProps> = ({ children, title, isOpen, onToggle, isDisabled }) => {
     return (
         <div style={{
             flexGrow: isOpen ? 1 : 0,
@@ -23,6 +24,11 @@ const StepAccordion: FC<StepAccordionProps> = ({ children, title, isOpen, onTogg
             {title && ( 
                 <div
                     onClick = {onToggle}
+                    style = {{
+                        opacity: isDisabled ? 0.5 : 1,
+                        pointerEvents: isDisabled ? 'none' : 'auto',
+                        cursor: isDisabled ? 'default' : 'pointer',
+                    }}
                 >
                     {title}
                 </div>
@@ -31,7 +37,7 @@ const StepAccordion: FC<StepAccordionProps> = ({ children, title, isOpen, onTogg
                 style = {{
                     flexGrow: isOpen ? 1 : 0,
                     // height: 'auto',
-                    height: isOpen ? '140px' : 0,   // TODO: This is hardcoded but that's not ideal
+                    height: isOpen ? '170px' : 0,   // TODO: This is hardcoded but that's not ideal
                     // maxHeight: isOpen ? '500px' : 0,
                     overflow: 'hidden',
                     alignContent: 'center',

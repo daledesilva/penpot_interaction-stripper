@@ -17,9 +17,8 @@ export interface AppState {
             | '3-flow-filters'
             | '4-component-filters'
             | '5-trigger-filters'
-            | '6-completion'
-            | '7-confirmation',
-    filterMode: 'none' | 'interactions' | 'missing-interactions' | 'altered-interactions',
+            | '6-confirmation',
+    filterMode: null | 'interactions' | 'missing-interactions' | 'altered-interactions',
     flowFilters: {
         enablingFlows: boolean,
         irrelevantToFlows: boolean
@@ -39,20 +38,20 @@ export interface AppState {
 
 const initialUiState: AppState = {
     uiStep: '1-no-selection',
-    filterMode: 'none',
+    filterMode: null,
     flowFilters: {
-        enablingFlows: false,
-        irrelevantToFlows: false
+        enablingFlows: true,
+        irrelevantToFlows: true
     },
     componentFilters: {
-        components: false,
-        nonComponents: false
+        components: true,
+        nonComponents: true
     },
     triggerFilters: {
-        onClicks: false,
-        onMouseEnters: false,
-        onMouseLeaves: false,
-        afterDelays: false
+        onClicks: true,
+        onMouseEnters: true,
+        onMouseLeaves: true,
+        afterDelays: true
     },
     isActionable: false,
 }
@@ -88,129 +87,147 @@ const App: FC<AppProps> = ({ children }) => {
     }, []);
 
     return (<>
-        <AccordionStretchContainer>
-
-            <StepAccordion
-                isOpen = {appState.uiStep === '1-no-selection'}
-                onToggle = {() => setAppState({...appState, uiStep: '1-no-selection'})}
+        <div style={{
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+        }}>
+            <AccordionStretchContainer
+                style = {{
+                    flexGrow: 1,
+                }}
             >
-                <p>Select an object to begin...</p>
-            </StepAccordion>
 
-            <StepAccordion
-                title = 'Filter mode'
-                isOpen = {appState.uiStep === '2-filter-mode'}
-                onToggle = {() => setAppState({...appState, uiStep: '2-filter-mode'})}
-            >
-                <ModeButton
-                    active = {appState.filterMode === 'interactions'}
-                    filter = {filterToInteractions}
+                <StepAccordion
+                    isOpen = {appState.uiStep === '1-no-selection'}
+                    onToggle = {() => setAppState({...appState, uiStep: '1-no-selection'})}
                 >
-                    Interactions & transitions
-                </ModeButton>
-                <ModeButton
-                    active = {appState.filterMode === 'missing-interactions'}
-                    filter = {filterToMissingInteractions}
-                >
-                    Missing interactions
-                </ModeButton>
-                <ModeButton
-                    active = {appState.filterMode === 'altered-interactions'}
-                    filter = {filterToAlteredInteractions}
-                >
-                    Altered interactions
-                </ModeButton>
-            </StepAccordion>
-        
-            <StepAccordion
-                title = 'Flow filters'
-                isOpen = {appState.uiStep === '3-flow-filters'} 
-                onToggle = {() => setAppState({...appState, uiStep: '3-flow-filters'})}
-            >
-                <FilterButton
-                    active = {appState.flowFilters.enablingFlows}
-                    filter = {filterToEnablingFlows}
-                    toggleFilter = {toggleEnablingFlows}
-                >
-                    Enabling flows
-                </FilterButton>
-                <FilterButton
-                    active = {appState.flowFilters.irrelevantToFlows}
-                    filter = {filterToIrrelevantFlows}
-                    toggleFilter = {toggleIrrelevantToFlows}
-                >
-                    Irrelevant to flows
-                </FilterButton>
-            </StepAccordion>
+                    <p>Select an object to begin...</p>
+                </StepAccordion>
 
-            <StepAccordion
-                title = 'Component filters'
-                isOpen = {appState.uiStep === '4-component-filters'}
-                onToggle = {() => setAppState({...appState, uiStep: '4-component-filters'})}
-            >
-                <FilterButton
-                    active = {appState.componentFilters.components}
-                    filter = {filterToComponents}
-                    toggleFilter = {toggleComponents}
+                <StepAccordion
+                    title = 'Filter mode'
+                    isDisabled = {appState.uiStep === '1-no-selection'}
+                    isOpen = {appState.uiStep === '2-filter-mode'}
+                    onToggle = {() => setAppState({...appState, uiStep: '2-filter-mode'})}
                 >
-                    Components
-                </FilterButton>
-                <FilterButton
-                    active = {appState.componentFilters.nonComponents}
-                    filter = {filterToNonComponents}
-                    toggleFilter = {toggleNonComponents}
+                    <ModeButton
+                        active = {appState.filterMode === 'interactions'}
+                        filter = {filterToInteractions}
+                    >
+                        Interactions & transitions
+                    </ModeButton>
+                    <ModeButton
+                        active = {appState.filterMode === 'missing-interactions'}
+                        filter = {filterToMissingInteractions}
+                    >
+                        Missing interactions
+                    </ModeButton>
+                    <ModeButton
+                        active = {appState.filterMode === 'altered-interactions'}
+                        filter = {filterToAlteredInteractions}
+                    >
+                        Altered interactions
+                    </ModeButton>
+                </StepAccordion>
+            
+                <StepAccordion
+                    title = 'Flow filters'
+                    isDisabled = {!appState.filterMode}
+                    isOpen = {appState.uiStep === '3-flow-filters'} 
+                    onToggle = {() => setAppState({...appState, uiStep: '3-flow-filters'})}
                 >
-                    Non-Components
-                </FilterButton>
-            </StepAccordion>
+                    <FilterButton
+                        active = {appState.flowFilters.enablingFlows}
+                        filter = {filterToEnablingFlows}
+                        toggleFilter = {toggleEnablingFlows}
+                    >
+                        Enabling flows
+                    </FilterButton>
+                    <FilterButton
+                        active = {appState.flowFilters.irrelevantToFlows}
+                        filter = {filterToIrrelevantFlows}
+                        toggleFilter = {toggleIrrelevantToFlows}
+                    >
+                        Irrelevant to flows
+                    </FilterButton>
+                </StepAccordion>
 
-            <StepAccordion
-                title = 'Trigger filters' 
-                isOpen = {appState.uiStep === '5-trigger-filters'}
-                onToggle = {() => setAppState({...appState, uiStep: '5-trigger-filters'})}
-            >
-                <FilterButton
-                    active = {appState.triggerFilters.onClicks}
-                    filter = {filterToOnClicks}
-                    toggleFilter = {toggleOnClicks}
+                <StepAccordion
+                    title = 'Component filters'
+                    isDisabled = {!appState.filterMode}
+                    isOpen = {appState.uiStep === '4-component-filters'}
+                    onToggle = {() => setAppState({...appState, uiStep: '4-component-filters'})}
                 >
-                    On Clicks
-                </FilterButton>
-                <FilterButton
-                    active = {appState.triggerFilters.onMouseEnters}
-                    filter = {filterToOnMouseEnters}
-                    toggleFilter = {toggleOnMouseEnters}
-                >
-                    On Mouse Enters
-                </FilterButton>
-                <FilterButton
-                    active = {appState.triggerFilters.onMouseLeaves}
-                    filter = {filterToOnMouseLeaves}
-                    toggleFilter = {toggleOnMouseLeaves}
-                >
-                    On Mouse Leaves
-                </FilterButton>
-                <FilterButton
-                    active = {appState.triggerFilters.afterDelays}
-                    filter = {filterToAfterDelays}
-                    toggleFilter = {toggleAfterDelays}
-                >
-                    After Delays
-                </FilterButton>
-            </StepAccordion>
+                    <FilterButton
+                        active = {appState.componentFilters.components}
+                        filter = {filterToComponents}
+                        toggleFilter = {toggleComponents}
+                    >
+                        Components
+                    </FilterButton>
+                    <FilterButton
+                        active = {appState.componentFilters.nonComponents}
+                        filter = {filterToNonComponents}
+                        toggleFilter = {toggleNonComponents}
+                    >
+                        Non-Components
+                    </FilterButton>
+                </StepAccordion>
 
-            {appState.uiStep === '6-completion' && (<div>
-                <button onClick={removeInteractions}>
-                    Remove Interactions
-                </button>
-            </div>)}
+                <StepAccordion
+                    title = 'Trigger filters' 
+                    isDisabled = {!appState.filterMode}
+                    isOpen = {appState.uiStep === '5-trigger-filters'}
+                    onToggle = {() => setAppState({...appState, uiStep: '5-trigger-filters'})}
+                >
+                    <FilterButton
+                        active = {appState.triggerFilters.onClicks}
+                        filter = {filterToOnClicks}
+                        toggleFilter = {toggleOnClicks}
+                    >
+                        On Clicks
+                    </FilterButton>
+                    <FilterButton
+                        active = {appState.triggerFilters.onMouseEnters}
+                        filter = {filterToOnMouseEnters}
+                        toggleFilter = {toggleOnMouseEnters}
+                    >
+                        On Mouse Enters
+                    </FilterButton>
+                    <FilterButton
+                        active = {appState.triggerFilters.onMouseLeaves}
+                        filter = {filterToOnMouseLeaves}
+                        toggleFilter = {toggleOnMouseLeaves}
+                    >
+                        On Mouse Leaves
+                    </FilterButton>
+                    <FilterButton
+                        active = {appState.triggerFilters.afterDelays}
+                        filter = {filterToAfterDelays}
+                        toggleFilter = {toggleAfterDelays}
+                    >
+                        After Delays
+                    </FilterButton>
+                </StepAccordion>
 
-            {appState.uiStep === '7-confirmation' && (<div>
-                <h1>Changes applied</h1>
-            </div>)}
+                {appState.uiStep === '6-confirmation' && (<div>
+                    <h1>Changes applied</h1>
+                </div>)}
 
-        </AccordionStretchContainer>
-        
+            </AccordionStretchContainer>
+
+            {appState.filterMode && (
+                <div>
+                    <button
+                        onClick = {removeInteractions}
+                        disabled = {!appState.isActionable}
+                    >
+                        Remove Interactions
+                    </button>
+                </div>
+            )}
+        </div>
     </>);
 
     // Helper functions
@@ -230,21 +247,33 @@ const App: FC<AppProps> = ({ children }) => {
         const newState = JSON.parse(JSON.stringify(appState));
         newState.filterMode = 'interactions';
         setAppState(newState);
-        setUiStep_withDelay({...newState, uiStep: '3-flow-filters'});
+        setUiStep_withDelay({
+            ...newState,
+            uiStep: '3-flow-filters',
+            isActionable: true
+        });
         applyFilters(newState);
     }
     function filterToMissingInteractions() { 
         const newState = JSON.parse(JSON.stringify(appState));
         newState.filterMode = 'missing-interactions';
         setAppState(newState);
-        setUiStep_withDelay({...newState, uiStep: '3-flow-filters'});
+        setUiStep_withDelay({
+            ...newState,
+            uiStep: '3-flow-filters',
+            isActionable: true
+        });
         applyFilters(newState);
     }
     function filterToAlteredInteractions() {
         const newState = JSON.parse(JSON.stringify(appState));
         newState.filterMode = 'altered-interactions';
         setAppState(newState);
-        setUiStep_withDelay({...newState, uiStep: '3-flow-filters'});
+        setUiStep_withDelay({
+            ...newState,
+            uiStep: '3-flow-filters',
+            isActionable: true
+        });
         applyFilters(newState);
     }
 

@@ -36,8 +36,12 @@ let expectedSelectionIds: string[] = [];
 
 penpot.ui.open("Interaction Stripper", `?theme=${penpot.theme}`, {
 	width: 200,
-	height: 300,
+	height: 350,
 });
+
+setTimeout(() => {
+	expectedSelectionIds = sendAppSelectionIds();
+}, 500);
 
 interface Message {
 	action: string;
@@ -161,6 +165,8 @@ let selectionDebounceTimer: NodeJS.Timeout | null = null;
 penpot.on('selectionchange', (newSelectionIds: string[]) => {
 	if (selectionDebounceTimer) clearTimeout(selectionDebounceTimer);
 	selectionDebounceTimer = setTimeout(() => {
+		debug(['expectedSelectionIds', expectedSelectionIds]);
+		debug(['newSelectionIds', newSelectionIds]);
 
 		if (selectionsEquivalent(expectedSelectionIds, newSelectionIds)) return;
 		// TODO: Shouldn't save empty selections, but need to translate that to appStateHistory too
@@ -172,17 +178,23 @@ penpot.on('selectionchange', (newSelectionIds: string[]) => {
 		debug(['curSelection', selectionFromUser]);
 		debug(['selectionHistory', selectionHistory]);
 
-		penpot.ui.sendMessage({
-			source: "penpot",
-			type: "selection-change",
-			selectionIds: expectedSelectionIds,
-		});
+		sendAppSelectionIds(expectedSelectionIds);
 
 	}, 1000);
 
 });
 function ignoreRecentSelectionChange() {
 	expectedSelectionIds = penpot.selection.map((shape) => shape.id);
+}
+function sendAppSelectionIds(_selectionIds?: string[]): string[] {
+	let selectionIds = _selectionIds || penpot.selection.map((shape) => shape.id);
+	penpot.ui.sendMessage({
+		source: "penpot",
+		type: "selection-change",
+		selectionIds,
+	});
+	debug(['sendAppSelectionIds', selectionIds]);
+	return selectionIds;
 }
 
 
