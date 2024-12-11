@@ -1,23 +1,35 @@
 
 import { Board, Group, Shape } from "@penpot/plugin-types";
+import { addToBoards } from "./get-boards";
 
 //////////////
 //////////////
 
-export function filterToNonFlowShapes(_shapes: Shape[], _boards: Board[] = []): Shape[] {
+export function filterToNonFlowShapes(props: {
+    _shapesToFilter: Shape[],
+    _originalUserSelection?: Shape[],
+    _boards?: Board[]
+}): Shape[] {
+
+    const {
+        _shapesToFilter,
+        _originalUserSelection,
+        _boards: _boardsFromUserSelection = []
+    } = props;
+
     let nonFlowShapes: Shape[] = [];
     const boards: Board[] = [];
-    if(_boards) boards.push(..._boards);
+    if(_boardsFromUserSelection) boards.push(..._boardsFromUserSelection);
     
-    // Iterate through all shapes and find any that are boards
-    _shapes.forEach( (shape) => {
-        if(penpot.utils.types.isBoard(shape)) {
-            boards.push(shape);
-        }
-    });
+    // If the original user selection is passed in, get any boards that are direct children
+    if(_originalUserSelection) {
+        addToBoards(boards, _originalUserSelection);
+    };
+    // If any of the shapes to filter are boards, add them to the list
+    addToBoards(boards, _shapesToFilter);
 
     // Iterate through all shapes
-    _shapes.forEach( (shape) => {
+    _shapesToFilter.forEach( (shape) => {
     
         shape.interactions.forEach( (interaction) => {
             const action = interaction.action;
@@ -56,10 +68,10 @@ export function filterToNonFlowShapes(_shapes: Shape[], _boards: Board[] = []): 
         if(penpot.utils.types.isBoard(shape)) {
             // Components and any kind of layout is a board. Not like Figma where there are Frames.
             const board = shape as Board;
-            nonFlowShapes.push( ...filterToNonFlowShapes(board.children, boards) );
+            nonFlowShapes.push( ...filterToNonFlowShapes({ _shapesToFilter: board.children, _boards: boards }) );
         } else if(penpot.utils.types.isGroup(shape)) {  // Does this return true for components?
             const group = shape as Group;
-            nonFlowShapes.push( ...filterToNonFlowShapes(group.children, boards) );
+            nonFlowShapes.push( ...filterToNonFlowShapes({ _shapesToFilter: group.children, _boards: boards }) );
         }
     
     });

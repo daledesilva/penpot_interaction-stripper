@@ -12,7 +12,9 @@ document.body.dataset.theme = searchParams.get("theme") ?? "light";
 
 // Listen plugin.ts messages
 window.addEventListener("message", (event) => {
-    if (event.data.source === "penpot") {
+    if(event.data.source !== "penpot") return;
+
+    if(event.data.type === "themechange") {
         document.body.dataset.theme = event.data.theme;
     }
 });

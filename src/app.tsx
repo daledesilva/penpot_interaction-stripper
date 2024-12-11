@@ -1,18 +1,21 @@
-import React, { FC, ReactNode, useState } from 'react';
+import React, { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import StepAccordion from './components/StepAccordion';
-import { debug, info } from './utils/log-to-console';
-import { removeInteractions } from './logic/remove-interactions';
 import ModeButton from './components/ModeButton';
 import FilterButton from './components/FilterButton';
 import AccordionStretchContainer from './components/AccordionStretchContainer';
+import { applyFilters } from './logic/apply-filters';
+
+///////////
+
+const HISTORY_LENGTH = 5;
 
 ///////////
 ///////////
-interface AppState {
+export interface AppState {
     uiStep:   '1-no-selection'
             | '2-filter-mode'
             | '3-flow-filters'
-            | '4-shape-filters'
+            | '4-component-filters'
             | '5-trigger-filters'
             | '6-completion'
             | '7-confirmation',
@@ -21,7 +24,7 @@ interface AppState {
         enablingFlows: boolean,
         irrelevantToFlows: boolean
     },
-    shapeFilters: {
+    componentFilters: {
         components: boolean,
         nonComponents: boolean
     },
@@ -41,7 +44,7 @@ const initialUiState: AppState = {
         enablingFlows: false,
         irrelevantToFlows: false
     },
-    shapeFilters: {
+    componentFilters: {
         components: false,
         nonComponents: false
     },
@@ -61,37 +64,58 @@ interface AppProps {
 }
 
 const App: FC<AppProps> = ({ children }) => {
-    const [uiState, setUiState] = useState<AppState>(initialUiState);
+    const [appState, setAppState] = useState<AppState>(initialUiState);
+    const appStateHistory = useRef<AppState[]>([]);
+
+    useEffect(() => {
+
+        window.addEventListener("message", (event) => {
+            if(event.data.source !== "penpot") return;
+        
+            if(event.data.type === "selection-change") {
+                appStateHistory.current.push(initialUiState);
+                if(appStateHistory.current.length > HISTORY_LENGTH) appStateHistory.current.shift();
+
+                const newUiState = JSON.parse(JSON.stringify(initialUiState));
+                if(event.data.selectionIds.length) {
+                    newUiState.uiStep = '2-filter-mode';
+                }
+                setAppState(newUiState);
+                console.log('appStateHistory', appStateHistory.current);
+            }
+        })
+
+    }, []);
 
     return (<>
         <AccordionStretchContainer>
 
             <StepAccordion
-                isOpen = {uiState.uiStep === '1-no-selection'}
-                onToggle = {() => setUiState({...uiState, uiStep: '1-no-selection'})}
+                isOpen = {appState.uiStep === '1-no-selection'}
+                onToggle = {() => setAppState({...appState, uiStep: '1-no-selection'})}
             >
                 <p>Select an object to begin...</p>
             </StepAccordion>
 
             <StepAccordion
                 title = 'Filter mode'
-                isOpen = {uiState.uiStep === '2-filter-mode'}
-                onToggle = {() => setUiState({...uiState, uiStep: '2-filter-mode'})}
+                isOpen = {appState.uiStep === '2-filter-mode'}
+                onToggle = {() => setAppState({...appState, uiStep: '2-filter-mode'})}
             >
                 <ModeButton
-                    active = {uiState.filterMode === 'interactions'}
+                    active = {appState.filterMode === 'interactions'}
                     filter = {filterToInteractions}
                 >
                     Interactions & transitions
                 </ModeButton>
                 <ModeButton
-                    active = {uiState.filterMode === 'missing-interactions'}
+                    active = {appState.filterMode === 'missing-interactions'}
                     filter = {filterToMissingInteractions}
                 >
                     Missing interactions
                 </ModeButton>
                 <ModeButton
-                    active = {uiState.filterMode === 'altered-interactions'}
+                    active = {appState.filterMode === 'altered-interactions'}
                     filter = {filterToAlteredInteractions}
                 >
                     Altered interactions
@@ -100,18 +124,18 @@ const App: FC<AppProps> = ({ children }) => {
         
             <StepAccordion
                 title = 'Flow filters'
-                isOpen = {uiState.uiStep === '3-flow-filters'} 
-                onToggle = {() => setUiState({...uiState, uiStep: '3-flow-filters'})}
+                isOpen = {appState.uiStep === '3-flow-filters'} 
+                onToggle = {() => setAppState({...appState, uiStep: '3-flow-filters'})}
             >
                 <FilterButton
-                    active = {uiState.flowFilters.enablingFlows}
+                    active = {appState.flowFilters.enablingFlows}
                     filter = {filterToEnablingFlows}
                     toggleFilter = {toggleEnablingFlows}
                 >
                     Enabling flows
                 </FilterButton>
                 <FilterButton
-                    active = {uiState.flowFilters.irrelevantToFlows}
+                    active = {appState.flowFilters.irrelevantToFlows}
                     filter = {filterToIrrelevantFlows}
                     toggleFilter = {toggleIrrelevantToFlows}
                 >
@@ -120,19 +144,19 @@ const App: FC<AppProps> = ({ children }) => {
             </StepAccordion>
 
             <StepAccordion
-                title = 'Shape filters'
-                isOpen = {uiState.uiStep === '4-shape-filters'}
-                onToggle = {() => setUiState({...uiState, uiStep: '4-shape-filters'})}
+                title = 'Component filters'
+                isOpen = {appState.uiStep === '4-component-filters'}
+                onToggle = {() => setAppState({...appState, uiStep: '4-component-filters'})}
             >
                 <FilterButton
-                    active = {uiState.shapeFilters.components}
+                    active = {appState.componentFilters.components}
                     filter = {filterToComponents}
                     toggleFilter = {toggleComponents}
                 >
                     Components
                 </FilterButton>
                 <FilterButton
-                    active = {uiState.shapeFilters.nonComponents}
+                    active = {appState.componentFilters.nonComponents}
                     filter = {filterToNonComponents}
                     toggleFilter = {toggleNonComponents}
                 >
@@ -142,32 +166,32 @@ const App: FC<AppProps> = ({ children }) => {
 
             <StepAccordion
                 title = 'Trigger filters' 
-                isOpen = {uiState.uiStep === '5-trigger-filters'}
-                onToggle = {() => setUiState({...uiState, uiStep: '5-trigger-filters'})}
+                isOpen = {appState.uiStep === '5-trigger-filters'}
+                onToggle = {() => setAppState({...appState, uiStep: '5-trigger-filters'})}
             >
                 <FilterButton
-                    active = {uiState.triggerFilters.onClicks}
+                    active = {appState.triggerFilters.onClicks}
                     filter = {filterToOnClicks}
                     toggleFilter = {toggleOnClicks}
                 >
                     On Clicks
                 </FilterButton>
                 <FilterButton
-                    active = {uiState.triggerFilters.onMouseEnters}
+                    active = {appState.triggerFilters.onMouseEnters}
                     filter = {filterToOnMouseEnters}
                     toggleFilter = {toggleOnMouseEnters}
                 >
                     On Mouse Enters
                 </FilterButton>
                 <FilterButton
-                    active = {uiState.triggerFilters.onMouseLeaves}
+                    active = {appState.triggerFilters.onMouseLeaves}
                     filter = {filterToOnMouseLeaves}
                     toggleFilter = {toggleOnMouseLeaves}
                 >
                     On Mouse Leaves
                 </FilterButton>
                 <FilterButton
-                    active = {uiState.triggerFilters.afterDelays}
+                    active = {appState.triggerFilters.afterDelays}
                     filter = {filterToAfterDelays}
                     toggleFilter = {toggleAfterDelays}
                 >
@@ -175,13 +199,13 @@ const App: FC<AppProps> = ({ children }) => {
                 </FilterButton>
             </StepAccordion>
 
-            {uiState.uiStep === '6-completion' && (<div>
+            {appState.uiStep === '6-completion' && (<div>
                 <button onClick={removeInteractions}>
                     Remove Interactions
                 </button>
             </div>)}
 
-            {uiState.uiStep === '7-confirmation' && (<div>
+            {appState.uiStep === '7-confirmation' && (<div>
                 <h1>Changes applied</h1>
             </div>)}
 
@@ -196,171 +220,179 @@ const App: FC<AppProps> = ({ children }) => {
 
     function setUiStep_withDelay(newState: AppState) {
         setTimeout(() => {
-            setUiState(newState);
+            setAppState(newState);
         }, 200);
     }
 
     // Filter modes
 
     function filterToInteractions() {
-        const newState = JSON.parse(JSON.stringify(uiState));
+        const newState = JSON.parse(JSON.stringify(appState));
         newState.filterMode = 'interactions';
-        setUiState(newState);
+        setAppState(newState);
         setUiStep_withDelay({...newState, uiStep: '3-flow-filters'});
-        // parent.postMessage('filter-to-interactions', '*');
+        applyFilters(newState);
     }
     function filterToMissingInteractions() { 
-        const newState = JSON.parse(JSON.stringify(uiState));
+        const newState = JSON.parse(JSON.stringify(appState));
         newState.filterMode = 'missing-interactions';
-        setUiState(newState);
+        setAppState(newState);
         setUiStep_withDelay({...newState, uiStep: '3-flow-filters'});
-        // parent.postMessage('filter-to-missing-interactions', '*');
+        applyFilters(newState);
     }
     function filterToAlteredInteractions() {
-        const newState = JSON.parse(JSON.stringify(uiState));
+        const newState = JSON.parse(JSON.stringify(appState));
         newState.filterMode = 'altered-interactions';
-        setUiState(newState);
+        setAppState(newState);
         setUiStep_withDelay({...newState, uiStep: '3-flow-filters'});
-        // parent.postMessage('filter-to-altered-interactions', '*');
+        applyFilters(newState);
     }
 
     // Flow filters
 
     function filterToEnablingFlows() {
-        const newState = JSON.parse(JSON.stringify(uiState));
+        const newState = JSON.parse(JSON.stringify(appState));
         newState.flowFilters.enablingFlows = true;
         newState.flowFilters.irrelevantToFlows = false;
-        setUiState(newState);
-        setUiStep_withDelay({...newState, uiStep: '4-shape-filters'});
-        // parent.postMessage('filter-to-flow-shapes', '*');
+        setAppState(newState);
+        setUiStep_withDelay({...newState, uiStep: '4-component-filters'});
+        applyFilters(newState);
     }
     function toggleEnablingFlows() {
-        const newState = JSON.parse(JSON.stringify(uiState));
+        const newState = JSON.parse(JSON.stringify(appState));
         newState.flowFilters.enablingFlows = !newState.flowFilters.enablingFlows;
-        setUiState(newState);
+        setAppState(newState);
+        applyFilters(newState);
     }
 
     function filterToIrrelevantFlows() {
-        const newState = JSON.parse(JSON.stringify(uiState));
+        const newState = JSON.parse(JSON.stringify(appState));
         newState.flowFilters.enablingFlows = false;
         newState.flowFilters.irrelevantToFlows = true;
-        setUiState(newState);
-        setUiStep_withDelay({...newState, uiStep: '4-shape-filters'});
-        // parent.postMessage('filter-to-non-flow-shapes', '*');
+        setAppState(newState);
+        setUiStep_withDelay({...newState, uiStep: '4-component-filters'});
+        applyFilters(newState);
     }
     function toggleIrrelevantToFlows() {
-        const newState = JSON.parse(JSON.stringify(uiState));
+        const newState = JSON.parse(JSON.stringify(appState));
         newState.flowFilters.irrelevantToFlows = !newState.flowFilters.irrelevantToFlows;
-        setUiState(newState);
+        setAppState(newState);
+        applyFilters(newState);
     }
 
     // Shape filters
 
     function filterToComponents() {
-        const newState = JSON.parse(JSON.stringify(uiState));
-        newState.shapeFilters.components = true;
-        newState.shapeFilters.nonComponents = false;
-        setUiState(newState);
+        const newState = JSON.parse(JSON.stringify(appState));
+        newState.componentFilters.components = true;
+        newState.componentFilters.nonComponents = false;
+        setAppState(newState);
         setUiStep_withDelay({...newState, uiStep: '5-trigger-filters'});
-        // parent.postMessage('filter-to-components', '*');
+        applyFilters(newState);
     }
 
     function toggleComponents() {
-        const newState = JSON.parse(JSON.stringify(uiState));
-        newState.shapeFilters.components = !newState.shapeFilters.components;
-        setUiState(newState);
+        const newState = JSON.parse(JSON.stringify(appState));
+        newState.componentFilters.components = !newState.componentFilters.components;
+        setAppState(newState);
+        applyFilters(newState);
     }
 
     function filterToNonComponents() {
-        const newState = JSON.parse(JSON.stringify(uiState));
-        newState.shapeFilters.components = false;
-        newState.shapeFilters.nonComponents = true;
-        setUiState(newState);
+        const newState = JSON.parse(JSON.stringify(appState));
+        newState.componentFilters.components = false;
+        newState.componentFilters.nonComponents = true;
+        setAppState(newState);
         setUiStep_withDelay({...newState, uiStep: '5-trigger-filters'});
-        // parent.postMessage('filter-to-non-components', '*');
+        applyFilters(newState);
     }
 
     function toggleNonComponents() {
-        const newState = JSON.parse(JSON.stringify(uiState));
-        newState.shapeFilters.nonComponents = !newState.shapeFilters.nonComponents;
-        setUiState(newState);
+        const newState = JSON.parse(JSON.stringify(appState));
+        newState.componentFilters.nonComponents = !newState.componentFilters.nonComponents;
+        setAppState(newState);
+        applyFilters(newState);
     }
 
     // Interaction filters
 
     function filterToOnClicks() {
-        const newState = JSON.parse(JSON.stringify(uiState));
+        const newState = JSON.parse(JSON.stringify(appState));
         newState.triggerFilters.onClicks = true;
         newState.triggerFilters.onMouseEnters = false;
         newState.triggerFilters.onMouseLeaves = false;
         newState.triggerFilters.afterDelays = false;
-        setUiState(newState);
+        setAppState(newState);
         setUiStep_withDelay({...newState, uiStep: '6-completion'});
-        // parent.postMessage('filter-to-on-clicks', '*');
+        applyFilters(newState);
     }
 
     function toggleOnClicks() {
-        const newState = JSON.parse(JSON.stringify(uiState));
+        const newState = JSON.parse(JSON.stringify(appState));
         newState.triggerFilters.onClicks = !newState.triggerFilters.onClicks;
-        setUiState(newState);
+        setAppState(newState);
+        applyFilters(newState);
     }
 
     function filterToOnMouseEnters() {
-        const newState = JSON.parse(JSON.stringify(uiState));
+        const newState = JSON.parse(JSON.stringify(appState));
         newState.triggerFilters.onClicks = false;
         newState.triggerFilters.onMouseEnters = true;
         newState.triggerFilters.onMouseLeaves = false;
         newState.triggerFilters.afterDelays = false;
-        setUiState(newState);
+        setAppState(newState);
         setUiStep_withDelay({...newState, uiStep: '6-completion'});
-        // parent.postMessage('filter-to-on-mouse-enters', '*');
+        applyFilters(newState);
     }   
 
     function toggleOnMouseEnters() {
-        const newState = JSON.parse(JSON.stringify(uiState));
+        const newState = JSON.parse(JSON.stringify(appState));
         newState.triggerFilters.onMouseEnters = !newState.triggerFilters.onMouseEnters;
-        setUiState(newState);
+        setAppState(newState);
+        applyFilters(newState);
     }
 
     function filterToOnMouseLeaves() {
-        const newState = JSON.parse(JSON.stringify(uiState));
+        const newState = JSON.parse(JSON.stringify(appState));
         newState.triggerFilters.onClicks = false;
         newState.triggerFilters.onMouseEnters = false;
         newState.triggerFilters.onMouseLeaves = true;
         newState.triggerFilters.afterDelays = false;
-        setUiState(newState);
+        setAppState(newState);
         setUiStep_withDelay({...newState, uiStep: '6-completion'});
-        // parent.postMessage('filter-to-on-mouse-leaves', '*');
+        applyFilters(newState);
     }
 
     function toggleOnMouseLeaves() {
-        const newState = JSON.parse(JSON.stringify(uiState));
+        const newState = JSON.parse(JSON.stringify(appState));
         newState.triggerFilters.onMouseLeaves = !newState.triggerFilters.onMouseLeaves;
-        setUiState(newState);
+        setAppState(newState);
+        applyFilters(newState);
     }
 
     function filterToAfterDelays() {
-        const newState = JSON.parse(JSON.stringify(uiState));
+        const newState = JSON.parse(JSON.stringify(appState));
         newState.triggerFilters.onClicks = false;
         newState.triggerFilters.onMouseEnters = false;
         newState.triggerFilters.onMouseLeaves = false;
         newState.triggerFilters.afterDelays = true;
-        setUiState(newState);
+        setAppState(newState);
         setUiStep_withDelay({...newState, uiStep: '6-completion'});
-        // parent.postMessage('filter-to-after-delays', '*');
+        applyFilters(newState);
     }
 
     function toggleAfterDelays() {
-        const newState = JSON.parse(JSON.stringify(uiState));
+        const newState = JSON.parse(JSON.stringify(appState));
         newState.triggerFilters.afterDelays = !newState.triggerFilters.afterDelays;
-        setUiState(newState);
+        setAppState(newState);
+        applyFilters(newState);
     }
 
     function removeInteractions() {
-        parent.postMessage('remove-click-interactions', '*');
-        parent.postMessage('remove-mouseenter-interactions', '*');
-        parent.postMessage('remove-mouseleave-interactions', '*');
-        parent.postMessage('remove-after-delay-interactions', '*');
+        // parent.postMessage('remove-click-interactions', '*');
+        // parent.postMessage('remove-mouseenter-interactions', '*');
+        // parent.postMessage('remove-mouseleave-interactions', '*');
+        // parent.postMessage('remove-after-delay-interactions', '*');
     }
 }
 
