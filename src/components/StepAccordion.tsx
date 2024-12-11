@@ -43,6 +43,11 @@ const StepAccordion: FC<StepAccordionProps> = ({ children, title, isOpen, onTogg
                     alignContent: 'center',
                     // transition: "all 1s",
                     transition: "all 0.5s cubic-bezier(0.5, 0, 0.5, 1)",
+                    
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '4px',
+                    justifyContent: 'center',
                 }}>
                 {children}
             </div>

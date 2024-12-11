@@ -5,41 +5,65 @@ import AddRemoveButton from './AddRemoveButton';
 ////////////////////////
 ////////////////////////
 
-interface FilterButtonProps {
+interface FilterCheckboxProps {
     active: boolean;
-    filter: () => void;
-    toggleFilter: () => void;
+    onToggle: () => void;
     children?: ReactNode;
+    name: string;
 }
 
-const FilterButton: FC<FilterButtonProps> = ({ active, filter, toggleFilter, children }) => {
+const FilterCheckbox: FC<FilterCheckboxProps> = ({ active, onToggle, children, name }) => {
 
-    return (
+    return (<>
         <div
             style = {{
-                backgroundColor: active ? "var(--color-primary)" : "var(--color-secondary)",
-                color: active ? "var(--color-secondary)" : "var(--color-primary)",
+                alignSelf: 'flex-start',
+                
+                borderRadius: '12px',
+                padding: "4px",
+                backgroundColor: active ? 'white' : 'unset', //"var(--color-primary)" : "var(--color-secondary)",
+                color: active ? "black" : "white", //"var(--color-secondary)" : "var(--color-primary)",
+                cursor: "pointer",
+
                 display: "flex",
                 flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "flex-start",
-                gap: "10px",
+                alignItems: "center",   // vertically center the checkbox and label
+                justifyContent: "flex-start",   // horizontally align the checkbox and label
+                gap: 0,
             }}
+            onClick={onToggle}
         >
-            <ToggleButton
-                active={active}
-                onClick={filter}
+            <input 
+                type = "checkbox"
+                name = {name}
+                checked = {active}
+                onChange = {onToggle}
+                style = {{
+                    position: "absolute",
+                    opacity: 0,
+                    height: 0,
+                    width: 0,
+                }}
+            />
+            <AddRemoveButton
+                active = {active}
+                onClick = {onToggle}
+                size = '1.5em'
+            />
+            <label
+                style = {{
+                    // width: '100%',
+                    fontSize: "1em",
+                    paddingLeft: "8px",
+                    paddingRight: "12px",
+                    cursor: "pointer",
+                }}
+                htmlFor = {name}
             >
                 {children}
-            </ToggleButton>
-            <AddRemoveButton
-                added = {active}
-                onClick = {toggleFilter}
-            >
-                +
-            </AddRemoveButton>
+            </label>
         </div>
-    );
+    </>);
 };
 
-export default FilterButton;
+export default FilterCheckbox;

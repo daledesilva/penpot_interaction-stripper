@@ -4,30 +4,33 @@ import React, { FC, ReactNode } from 'react';
 ////////////////////////
 
 interface AddRemoveButtonProps {
-    added: boolean;
+    active: boolean;
     onClick: () => void;
     children?: ReactNode; 
+    style?: React.CSSProperties;
+    size?: string;
 }
 
-const AddRemoveButton: FC<AddRemoveButtonProps> = ({ added, onClick, children }) => {
+const AddRemoveButton: FC<AddRemoveButtonProps> = ({ active, onClick, children, style, size }) => {
     return (
         <button 
             onClick={onClick}
             style={{
-                backgroundColor: added ? 'white' : 'unset',//"var(--color-primary)" : "var(--color-secondary)",
-                color: added ? "black" : "white",//"var(--color-secondary)" : "var(--color-primary)",
-                width: "24px",
-                height: "24px",
+                backgroundColor: 'white',
+                color: "black",
+                width: size || '24px',
+                height: size || '24px',
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 border: "none",
-                borderRadius: "8px",
+                borderRadius: "50%",
                 cursor: "pointer",
                 transition: "all 0.2s ease",
+                ...style,
             }}
         >
-            {children}
+            +
         </button>
     );
 };

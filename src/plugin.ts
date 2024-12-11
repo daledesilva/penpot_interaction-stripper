@@ -193,7 +193,6 @@ function sendAppSelectionIds(_selectionIds?: string[]): string[] {
 		type: "selection-change",
 		selectionIds,
 	});
-	debug(['sendAppSelectionIds', selectionIds]);
 	return selectionIds;
 }
 
