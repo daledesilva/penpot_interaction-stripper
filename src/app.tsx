@@ -4,6 +4,7 @@ import ModeButton from './components/ModeButton';
 import FilterToggle from './components/FilterToggle';
 import AccordionStretchContainer from './components/AccordionStretchContainer';
 import { applyFilters } from './logic/apply-filters';
+import ActionButton from './components/ActionButton';
 
 ///////////
 
@@ -89,8 +90,11 @@ const App: FC<AppProps> = ({ children }) => {
     return (<>
         <div style={{
             height: '100%',
+            margin: 0,
+            overflow: 'hidden',
             display: 'flex',
             flexDirection: 'column',
+            gap: '15px'
         }}>
             <AccordionStretchContainer
                 style = {{
@@ -110,6 +114,7 @@ const App: FC<AppProps> = ({ children }) => {
                     isDisabled = {appState.uiStep === '1-no-selection'}
                     isOpen = {appState.uiStep === '2-filter-mode'}
                     onToggle = {() => setAppState({...appState, uiStep: '2-filter-mode'})}
+                    onForward = {appState.isActionable ? () => setAppState({...appState, uiStep: '3-flow-filters'}) : undefined}
                 >
                     <ModeButton
                         active = {appState.filterMode === 'interactions'}
@@ -136,7 +141,8 @@ const App: FC<AppProps> = ({ children }) => {
                     isDisabled = {!appState.filterMode}
                     isOpen = {appState.uiStep === '3-flow-filters'} 
                     onToggle = {() => setAppState({...appState, uiStep: '3-flow-filters'})}
-                    onContinue = {() => setAppState({...appState, uiStep: '4-component-filters'})}
+                    onForward = {() => setAppState({...appState, uiStep: '4-component-filters'})}
+                    onBackward = {() => setAppState({...appState, uiStep: '2-filter-mode'})}
                 >
                     <FilterToggle
                         name = 'enablingFlows'
@@ -159,7 +165,8 @@ const App: FC<AppProps> = ({ children }) => {
                     isDisabled = {!appState.filterMode}
                     isOpen = {appState.uiStep === '4-component-filters'}
                     onToggle = {() => setAppState({...appState, uiStep: '4-component-filters'})}
-                    onContinue = {() => setAppState({...appState, uiStep: '5-trigger-filters'})}
+                    onForward = {() => setAppState({...appState, uiStep: '5-trigger-filters'})}
+                    onBackward = {() => setAppState({...appState, uiStep: '3-flow-filters'})}
                 >
                     <FilterToggle
                         name = 'components'
@@ -182,7 +189,7 @@ const App: FC<AppProps> = ({ children }) => {
                     isDisabled = {!appState.filterMode}
                     isOpen = {appState.uiStep === '5-trigger-filters'}
                     onToggle = {() => setAppState({...appState, uiStep: '5-trigger-filters'})}
-                    onContinue = {() => setAppState({...appState, uiStep: '6-confirmation'})}
+                    onBackward = {() => setAppState({...appState, uiStep: '4-component-filters'})}
                 >
                     <FilterToggle
                         name = 'onClicks'
@@ -220,16 +227,16 @@ const App: FC<AppProps> = ({ children }) => {
 
             </AccordionStretchContainer>
 
-            {appState.filterMode && (
-                <div>
-                    <button
-                        onClick = {removeInteractions}
-                        disabled = {!appState.isActionable}
-                    >
-                        Remove Interactions
-                    </button>
-                </div>
-            )}
+            {/* {appState.filterMode && ( */}
+            <div>
+                <ActionButton
+                    onClick = {removeInteractions}
+                    disabled = {!appState.isActionable}
+                >
+                    Strip Interactions
+                </ActionButton>
+            </div>
+            {/* )} */}
         </div>
     </>);
 

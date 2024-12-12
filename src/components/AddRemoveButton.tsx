@@ -32,10 +32,10 @@ const AddRemoveButton: FC<AddRemoveButtonProps> = ({ active, onClick, children, 
             }}
         >
             {active ? (<>
-                #
+                {/* # */}
                 {/* <Check size={'1.2em'}/> */}
             </>) : (<>
-                #
+                {/* # */}
                 {/* <X size={'0.8em'}/> */}
             </>)}
         </button>

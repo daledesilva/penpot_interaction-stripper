@@ -1,14 +1,15 @@
 import React, { FC } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 ////////////////////////
 ////////////////////////
 
-interface ContinueButtonProps {
+interface NavigationButtonProps {
     onClick: () => void;
+    direction: 'forward' | 'backward';
 }
 
-const ContinueButton: FC<ContinueButtonProps> = ({ onClick }) => {
+const NavigationButton: FC<NavigationButtonProps> = ({ onClick, direction }) => {
     return (
         <button
             onClick={onClick}
@@ -23,9 +24,9 @@ const ContinueButton: FC<ContinueButtonProps> = ({ onClick }) => {
             onMouseEnter={e => e.currentTarget.style.color = 'white'}
             onMouseLeave={e => e.currentTarget.style.color = '#666'}
         >
-            <ChevronDown size={24} />
+            {direction === 'forward' ? <ChevronDown size={24} /> : <ChevronUp size={24} />}
         </button>
     );
 };
 
-export default ContinueButton;
+export default NavigationButton;

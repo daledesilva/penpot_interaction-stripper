@@ -1,5 +1,5 @@
 import React, { FC, ReactNode } from 'react';
-import ContinueButton from './ContinueButton';
+import NavigationButton from './NavigationButton';
 
 ////////////////////////
 ////////////////////////
@@ -9,11 +9,12 @@ interface StepAccordionProps {
     title?: string;
     isOpen: boolean;
     onToggle: () => void;
-    onContinue?: () => void;
+    onBackward?: () => void;
+    onForward?: () => void;
     children?: ReactNode;
 }
 
-const StepAccordion: FC<StepAccordionProps> = ({ children, title, isOpen, onToggle, isDisabled, onContinue }) => {
+const StepAccordion: FC<StepAccordionProps> = ({ children, title, isOpen, onToggle, isDisabled, onForward, onBackward }) => {
     return (
         <div style={{
             flexGrow: isOpen ? 1 : 0,
@@ -39,7 +40,7 @@ const StepAccordion: FC<StepAccordionProps> = ({ children, title, isOpen, onTogg
                 style = {{
                     flexGrow: isOpen ? 1 : 0,
                     // height: 'auto',
-                    height: isOpen ? '220px' : 0,   // TODO: This is hardcoded but that's not ideal
+                    height: isOpen ? '200px' : 0,   // TODO: This is hardcoded but that's not ideal
                     // maxHeight: isOpen ? '500px' : 0,
                     overflow: 'hidden',
                     alignContent: 'center',
@@ -50,10 +51,20 @@ const StepAccordion: FC<StepAccordionProps> = ({ children, title, isOpen, onTogg
                     flexDirection: 'column',
                     gap: '4px',
                     justifyContent: 'center',
-                }}>
+                }}
+            >
+                {onBackward && (
+                    <NavigationButton
+                        direction='backward'
+                        onClick={onBackward}
+                    />
+                )}
                 {children}
-                {onContinue && (
-                    <ContinueButton onClick={onContinue} />
+                {onForward && (
+                    <NavigationButton
+                        direction = 'forward'
+                        onClick = {onForward}
+                    />
                 )}
             </div>
         </div>
