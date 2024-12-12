@@ -136,6 +136,7 @@ const App: FC<AppProps> = ({ children }) => {
                     isDisabled = {!appState.filterMode}
                     isOpen = {appState.uiStep === '3-flow-filters'} 
                     onToggle = {() => setAppState({...appState, uiStep: '3-flow-filters'})}
+                    onContinue = {() => setAppState({...appState, uiStep: '4-component-filters'})}
                 >
                     <FilterToggle
                         name = 'enablingFlows'
@@ -158,6 +159,7 @@ const App: FC<AppProps> = ({ children }) => {
                     isDisabled = {!appState.filterMode}
                     isOpen = {appState.uiStep === '4-component-filters'}
                     onToggle = {() => setAppState({...appState, uiStep: '4-component-filters'})}
+                    onContinue = {() => setAppState({...appState, uiStep: '5-trigger-filters'})}
                 >
                     <FilterToggle
                         name = 'components'
@@ -180,6 +182,7 @@ const App: FC<AppProps> = ({ children }) => {
                     isDisabled = {!appState.filterMode}
                     isOpen = {appState.uiStep === '5-trigger-filters'}
                     onToggle = {() => setAppState({...appState, uiStep: '5-trigger-filters'})}
+                    onContinue = {() => setAppState({...appState, uiStep: '6-confirmation'})}
                 >
                     <FilterToggle
                         name = 'onClicks'

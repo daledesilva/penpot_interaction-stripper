@@ -1,4 +1,5 @@
 import React, { FC, ReactNode } from 'react';
+import ContinueButton from './ContinueButton';
 
 ////////////////////////
 ////////////////////////
@@ -8,10 +9,11 @@ interface StepAccordionProps {
     title?: string;
     isOpen: boolean;
     onToggle: () => void;
+    onContinue?: () => void;
     children?: ReactNode;
 }
 
-const StepAccordion: FC<StepAccordionProps> = ({ children, title, isOpen, onToggle, isDisabled }) => {
+const StepAccordion: FC<StepAccordionProps> = ({ children, title, isOpen, onToggle, isDisabled, onContinue }) => {
     return (
         <div style={{
             flexGrow: isOpen ? 1 : 0,
@@ -37,7 +39,7 @@ const StepAccordion: FC<StepAccordionProps> = ({ children, title, isOpen, onTogg
                 style = {{
                     flexGrow: isOpen ? 1 : 0,
                     // height: 'auto',
-                    height: isOpen ? '170px' : 0,   // TODO: This is hardcoded but that's not ideal
+                    height: isOpen ? '220px' : 0,   // TODO: This is hardcoded but that's not ideal
                     // maxHeight: isOpen ? '500px' : 0,
                     overflow: 'hidden',
                     alignContent: 'center',
@@ -50,6 +52,9 @@ const StepAccordion: FC<StepAccordionProps> = ({ children, title, isOpen, onTogg
                     justifyContent: 'center',
                 }}>
                 {children}
+                {onContinue && (
+                    <ContinueButton onClick={onContinue} />
+                )}
             </div>
         </div>
     );
