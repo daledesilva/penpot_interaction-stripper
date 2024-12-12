@@ -1,7 +1,7 @@
 import React, { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import StepAccordion from './components/StepAccordion';
 import ModeButton from './components/ModeButton';
-import FilterCheckbox from './components/FilterButton';
+import FilterToggle from './components/FilterToggle';
 import AccordionStretchContainer from './components/AccordionStretchContainer';
 import { applyFilters } from './logic/apply-filters';
 
@@ -137,20 +137,20 @@ const App: FC<AppProps> = ({ children }) => {
                     isOpen = {appState.uiStep === '3-flow-filters'} 
                     onToggle = {() => setAppState({...appState, uiStep: '3-flow-filters'})}
                 >
-                    <FilterCheckbox
+                    <FilterToggle
                         name = 'enablingFlows'
                         active = {appState.flowFilters.enablingFlows}
                         onToggle = {toggleEnablingFlows}
                     >
                         Enabling flows
-                    </FilterCheckbox>
-                    <FilterCheckbox
+                    </FilterToggle>
+                    <FilterToggle
                         name = 'irrelevantToFlows'
                         active = {appState.flowFilters.irrelevantToFlows}
                         onToggle = {toggleIrrelevantToFlows}
                     >
                         Irrelevant to flows
-                    </FilterCheckbox>
+                    </FilterToggle>
                 </StepAccordion>
 
                 <StepAccordion
@@ -159,20 +159,20 @@ const App: FC<AppProps> = ({ children }) => {
                     isOpen = {appState.uiStep === '4-component-filters'}
                     onToggle = {() => setAppState({...appState, uiStep: '4-component-filters'})}
                 >
-                    <FilterCheckbox
+                    <FilterToggle
                         name = 'components'
                         active = {appState.componentFilters.components}
                         onToggle = {toggleComponents}
                     >
                         Components
-                    </FilterCheckbox>
-                    <FilterCheckbox
+                    </FilterToggle>
+                    <FilterToggle
                         name = 'nonComponents'
                         active = {appState.componentFilters.nonComponents}
                         onToggle = {toggleNonComponents}
                     >
                         Non-Components
-                    </FilterCheckbox>
+                    </FilterToggle>
                 </StepAccordion>
 
                 <StepAccordion
@@ -181,34 +181,34 @@ const App: FC<AppProps> = ({ children }) => {
                     isOpen = {appState.uiStep === '5-trigger-filters'}
                     onToggle = {() => setAppState({...appState, uiStep: '5-trigger-filters'})}
                 >
-                    <FilterCheckbox
+                    <FilterToggle
                         name = 'onClicks'
                         active = {appState.triggerFilters.onClicks}
                         onToggle = {toggleOnClicks}
                     >
                         On Clicks
-                    </FilterCheckbox>
-                    <FilterCheckbox
+                    </FilterToggle>
+                    <FilterToggle
                         name = 'onMouseEnters'
                         active = {appState.triggerFilters.onMouseEnters}
                         onToggle = {toggleOnMouseEnters}
                     >
                         On Mouse Enters
-                    </FilterCheckbox>
-                    <FilterCheckbox
+                    </FilterToggle>
+                    <FilterToggle
                         name = 'onMouseLeaves'
                         active = {appState.triggerFilters.onMouseLeaves}
                         onToggle = {toggleOnMouseLeaves}
                     >
                         On Mouse Leaves
-                    </FilterCheckbox>
-                    <FilterCheckbox
+                    </FilterToggle>
+                    <FilterToggle
                         name = 'afterDelays'
                         active = {appState.triggerFilters.afterDelays}
                         onToggle = {toggleAfterDelays}
                     >
                         After Delays
-                    </FilterCheckbox>
+                    </FilterToggle>
                 </StepAccordion>
 
                 {appState.uiStep === '6-confirmation' && (<div>

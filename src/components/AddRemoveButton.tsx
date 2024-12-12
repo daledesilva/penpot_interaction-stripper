@@ -1,3 +1,4 @@
+import { Check, X } from 'lucide-react';
 import React, { FC, ReactNode } from 'react';
 
 ////////////////////////
@@ -16,21 +17,27 @@ const AddRemoveButton: FC<AddRemoveButtonProps> = ({ active, onClick, children, 
         <button 
             onClick={onClick}
             style={{
-                backgroundColor: 'white',
+                backgroundColor: active ? 'white' : 'grey',
                 color: "black",
-                width: size || '24px',
-                height: size || '24px',
+                aspectRatio: '1/1',
                 display: "flex",
-                alignItems: "center",
+                alignItems: "flex-end",
                 justifyContent: "center",
                 border: "none",
                 borderRadius: "50%",
                 cursor: "pointer",
                 transition: "all 0.2s ease",
+                fontSize: '1em',
                 ...style,
             }}
         >
-            +
+            {active ? (<>
+                #
+                {/* <Check size={'1.2em'}/> */}
+            </>) : (<>
+                #
+                {/* <X size={'0.8em'}/> */}
+            </>)}
         </button>
     );
 };

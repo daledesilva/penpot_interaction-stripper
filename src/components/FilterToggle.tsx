@@ -5,14 +5,14 @@ import AddRemoveButton from './AddRemoveButton';
 ////////////////////////
 ////////////////////////
 
-interface FilterCheckboxProps {
+interface FilterToggleProps {
     active: boolean;
     onToggle: () => void;
     children?: ReactNode;
     name: string;
 }
 
-const FilterCheckbox: FC<FilterCheckboxProps> = ({ active, onToggle, children, name }) => {
+const FilterToggle: FC<FilterToggleProps> = ({ active, onToggle, children, name }) => {
 
     return (<>
         <div
@@ -48,13 +48,12 @@ const FilterCheckbox: FC<FilterCheckboxProps> = ({ active, onToggle, children, n
             <AddRemoveButton
                 active = {active}
                 onClick = {onToggle}
-                size = '1.5em'
             />
             <label
                 style = {{
                     // width: '100%',
                     fontSize: "1em",
-                    paddingLeft: "8px",
+                    paddingLeft: active ? "0" : "8px",
                     paddingRight: "12px",
                     cursor: "pointer",
                 }}
@@ -66,4 +65,4 @@ const FilterCheckbox: FC<FilterCheckboxProps> = ({ active, onToggle, children, n
     </>);
 };
 
-export default FilterCheckbox;
+export default FilterToggle;
