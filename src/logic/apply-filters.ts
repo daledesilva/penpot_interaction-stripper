@@ -4,7 +4,7 @@ import { AppState } from "../app";
 //////////////////////////
 
 export function applyFilters(appState: AppState) {
-    if(appState.filterMode === null) return;
+    if(appState.mode === null) return;
 
     parent.postMessage({
         action: 'apply-filters',

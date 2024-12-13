@@ -6,11 +6,11 @@ import ToggleButton from './ToggleButton';
 
 interface ModeButtonProps {
     active: boolean;
-    filter: () => void;
+    onClick: () => void;
     children?: ReactNode;
 }
 
-const ModeButton: FC<ModeButtonProps> = ({ active, filter, children }) => {
+const ModeButton: FC<ModeButtonProps> = ({ active, onClick: filter, children }) => {
 
     return (
         <div>

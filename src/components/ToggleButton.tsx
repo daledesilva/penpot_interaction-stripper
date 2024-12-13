@@ -17,8 +17,10 @@ const ToggleButton: FC<ToggleButtonProps> = ({ active, onClick, children }) => {
             style = {{
                 backgroundColor: active ? 'white' : 'unset', //"var(--color-primary)" : "var(--color-secondary)",
                 color: active ? "black" : "white", //"var(--color-secondary)" : "var(--color-primary)",
-                borderRadius: "4px",
-                padding: "4px 8px",
+                borderRadius: '12px',
+                padding: "8px",
+                cursor: "pointer",
+                fontSize: "1em",
             }}
         >
             {children}

@@ -18,7 +18,6 @@ const FilterToggle: FC<FilterToggleProps> = ({ active, onToggle, children, name 
         <div
             style = {{
                 alignSelf: 'flex-start',
-                
                 borderRadius: '12px',
                 padding: "4px",
                 backgroundColor: active ? 'white' : 'unset', //"var(--color-primary)" : "var(--color-secondary)",

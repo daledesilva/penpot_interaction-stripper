@@ -52,16 +52,16 @@ penpot.ui.onMessage<Message>((message) => {
 	if (message.action === 'apply-filters') {
 		const appState: AppState = message.data;
 
-		// Filter mode messages
-		if (appState.filterMode === 'interactions') {
+		// Mode messages
+		if (appState.mode === 'existing-interactions') {
 			selectionAfterModeFilters = filterToHasInteractions(selectionFromUser);
 			penpot.selection = selectionAfterModeFilters;
 			ignoreRecentSelectionChange();
-		} else if (appState.filterMode === 'missing-interactions') {
+		} else if (appState.mode === 'missing-interactions') {
 			selectionAfterModeFilters = filterToMissingInteractions(selectionFromUser);
 			penpot.selection = selectionAfterModeFilters;
 			ignoreRecentSelectionChange();
-		} else if (appState.filterMode === 'altered-interactions') {
+		} else if (appState.mode === 'altered-interactions') {
 			selectionAfterModeFilters = filterToAddedInteractions(selectionFromUser);
 			penpot.selection = selectionAfterModeFilters;
 			ignoreRecentSelectionChange();
@@ -69,56 +69,43 @@ penpot.ui.onMessage<Message>((message) => {
 			selectionAfterModeFilters = selectionFromUser;
 		}
 
-
-		// Flow filter messages
-		if(appState.flowFilters.enablingFlows || appState.flowFilters.irrelevantToFlows) {
-			selectionAfterFlowFilters = [];
-			if (appState.flowFilters.enablingFlows) {
-				selectionAfterFlowFilters.push(...filterToFlowShapes({
-					_shapesToFilter: selectionAfterModeFilters,
-					_originalUserSelection: selectionFromUser
-				}));
-			}
-			if (appState.flowFilters.irrelevantToFlows) {
-				selectionAfterFlowFilters.push(...filterToNonFlowShapes({
-					_shapesToFilter: selectionAfterModeFilters,
-					_originalUserSelection: selectionFromUser
-				}));
-			}
-		} else {
-			selectionAfterFlowFilters = selectionAfterModeFilters;
+		// Destination filter messages
+		selectionAfterFlowFilters = [];
+		if (appState.destinations === 'insideFlow' || appState.destinations === 'all') {
+			selectionAfterFlowFilters.push(...filterToFlowShapes({
+				_shapesToFilter: selectionAfterModeFilters,
+				_originalUserSelection: selectionFromUser
+			}));
+		}
+		if (appState.destinations === 'outsideFlow' || appState.destinations === 'all') {
+			selectionAfterFlowFilters.push(...filterToNonFlowShapes({
+			_shapesToFilter: selectionAfterModeFilters,
+				_originalUserSelection: selectionFromUser
+			}));
 		}
 
-		// Shape filter messages
-		if(appState.componentFilters.components || appState.componentFilters.nonComponents) {
-			selectionAfterComponentFilters = [];
-			if (appState.componentFilters.components) {
-				selectionAfterComponentFilters.push(...filterToComponents(selectionAfterFlowFilters));
-			}
-			if (appState.componentFilters.nonComponents) {
-				selectionAfterComponentFilters.push(...filterToNonComponents(selectionAfterFlowFilters));
-			}
-		} else {
-			selectionAfterComponentFilters = selectionAfterFlowFilters;
+		// Object filter messages
+		selectionAfterComponentFilters = [];
+		if (appState.objects === 'components' || appState.objects === 'all') {
+			selectionAfterComponentFilters.push(...filterToComponents(selectionAfterFlowFilters));
+		}
+		if (appState.objects === 'noncomponents' || appState.objects === 'all') {
+			selectionAfterComponentFilters.push(...filterToNonComponents(selectionAfterFlowFilters));
 		}
 		
 		// Trigger filter messages
-		if(appState.triggerFilters.onClicks || appState.triggerFilters.onMouseEnters || appState.triggerFilters.onMouseLeaves || appState.triggerFilters.afterDelays) {
-			selectionAfterTriggerFilters = [];
-			if (appState.triggerFilters.onClicks) {
-				selectionAfterTriggerFilters.push(...filterToOnClicks(selectionAfterComponentFilters));
-			}
-			if (appState.triggerFilters.onMouseEnters) {
-				selectionAfterTriggerFilters.push(...filterToOnMouseEnters(selectionAfterComponentFilters));
-			}
-			if (appState.triggerFilters.onMouseLeaves) {
-				selectionAfterTriggerFilters.push(...filterToOnMouseLeaves(selectionAfterComponentFilters));
-			}
-			if (appState.triggerFilters.afterDelays) {
-				selectionAfterTriggerFilters.push(...filterToAfterDelays(selectionAfterComponentFilters));
-			}
-		} else {
-			selectionAfterTriggerFilters = selectionAfterComponentFilters;
+		selectionAfterTriggerFilters = [];
+		if (appState.triggers.onClicks) {
+			selectionAfterTriggerFilters.push(...filterToOnClicks(selectionAfterComponentFilters));
+		}
+		if (appState.triggers.onMouseEnters) {
+			selectionAfterTriggerFilters.push(...filterToOnMouseEnters(selectionAfterComponentFilters));
+		}
+		if (appState.triggers.onMouseLeaves) {
+			selectionAfterTriggerFilters.push(...filterToOnMouseLeaves(selectionAfterComponentFilters));
+		}
+		if (appState.triggers.afterDelays) {
+			selectionAfterTriggerFilters.push(...filterToAfterDelays(selectionAfterComponentFilters));
 		}
 
 		penpot.selection = selectionAfterTriggerFilters;
