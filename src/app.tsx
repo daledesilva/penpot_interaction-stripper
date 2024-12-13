@@ -1,10 +1,12 @@
 import React, { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import StepAccordion from './components/StepAccordion';
-import ModeButton from './components/ModeButton';
+import MenuButton from './components/MenuButton';
 import FilterToggle from './components/FilterToggle';
-import AccordionStretchContainer from './components/AccordionStretchContainer';
+import BodyContainer from './components/AccordionStretchContainer';
 import { applyFilters } from './logic/apply-filters';
 import ActionButton from './components/ActionButton';
+import PageButton from './components/PageButton';
+import { Page, PageCarousel, PageCarouselMenu } from './components/PageCarousel';
 
 ///////////
 
@@ -84,157 +86,167 @@ const App: FC<AppProps> = ({ children }) => {
             flexDirection: 'column',
             gap: '15px'
         }}>
-            <AccordionStretchContainer
+
+                <PageCarouselMenu>
+                    <PageButton
+                        isActive = {appState.uiStep === '2-filter-mode'}
+                        onClick = {() => setAppState({...appState, uiStep: '2-filter-mode'})}
+                    >
+                        Mode
+                    </PageButton>
+                    <PageButton
+                        isActive = {appState.uiStep === '3-destination-filters'}
+                        onClick = {() => setAppState({...appState, uiStep: '3-destination-filters'})}
+                    >
+                        Destinations
+                    </PageButton>
+                    <PageButton
+                        isActive = {appState.uiStep === '4-component-filters'}
+                        onClick = {() => setAppState({...appState, uiStep: '4-component-filters'})}
+                    >
+                        Objects
+                    </PageButton>
+                    <PageButton
+                        isActive = {appState.uiStep === '5-trigger-filters'}
+                        onClick = {() => setAppState({...appState, uiStep: '5-trigger-filters'})}
+                    >
+                        Triggers
+                    </PageButton>
+                </PageCarouselMenu>
+
+            <BodyContainer
                 style = {{
                     flexGrow: 1,
                 }}
             >
-
-                <StepAccordion
-                    isOpen = {appState.uiStep === '1-no-selection'}
-                    onToggle = {() => setAppState({...appState, uiStep: '1-no-selection'})}
+                
+                <PageCarousel
+                    style = {{
+                        flexGrow: 1,
+                    }}
                 >
-                    <p>Select an object to begin...</p>
-                </StepAccordion>
 
-                <StepAccordion
-                    title = 'Mode'
-                    isDisabled = {appState.uiStep === '1-no-selection'}
-                    isOpen = {appState.uiStep === '2-filter-mode'}
-                    onToggle = {() => setAppState({...appState, uiStep: '2-filter-mode'})}
-                    onForward = {appState.isActionable ? () => setAppState({...appState, uiStep: '3-destination-filters'}) : undefined}
-                >
-                    <ModeButton
-                        active = {appState.mode === 'existing-interactions'}
-                        onClick = {() => selectMode('existing-interactions')}
+                    <Page
+                        active = {appState.uiStep === '1-no-selection'}
                     >
-                        Existing interactions
-                    </ModeButton>
-                    <ModeButton
-                        active = {appState.mode === 'missing-interactions'}
-                        onClick = {() => selectMode('missing-interactions')}
+                        <p>Select an object to begin...</p>
+                    </Page>
+
+
+                    <Page
+                        active = {appState.uiStep === '2-filter-mode'}
                     >
-                        Missing interactions
-                    </ModeButton>
-                    <ModeButton
-                        active = {appState.mode === 'altered-interactions'}
-                        onClick = {() => selectMode('altered-interactions')}
-                    >
-                        Altered interactions
-                    </ModeButton>
-                </StepAccordion>
+                        <MenuButton
+                            active = {appState.mode === 'existing-interactions'}
+                            onClick = {() => selectMode('existing-interactions')}
+                        >
+                            Existing interactions
+                        </MenuButton>
+                        <MenuButton
+                            active = {appState.mode === 'missing-interactions'}
+                            onClick = {() => selectMode('missing-interactions')}
+                        >
+                            Missing interactions
+                        </MenuButton>
+                        <MenuButton
+                            active = {appState.mode === 'altered-interactions'}
+                            onClick = {() => selectMode('altered-interactions')}
+                        >
+                            Altered interactions
+                        </MenuButton>
+                    </Page>
             
-                <StepAccordion
-                    title = 'Destinations'
-                    isDisabled = {!appState.mode}
-                    isOpen = {appState.uiStep === '3-destination-filters'} 
-                    onToggle = {() => setAppState({...appState, uiStep: '3-destination-filters'})}
-                    onForward = {() => setAppState({...appState, uiStep: '4-component-filters'})}
-                    onBackward = {() => setAppState({...appState, uiStep: '2-filter-mode'})}
-                >
-                    <FilterToggle
-                        name = 'allDestinations'
-                        active = {appState.destinations === 'all'}
-                        onToggle = {() => selectDestinations('all')}
+                    <Page
+                        active = {appState.uiStep === '3-destination-filters'}
                     >
-                        All
-                    </FilterToggle>
-                    <FilterToggle
-                        name = 'insideFlow'
-                        active = {appState.destinations === 'insideFlow'}
-                        onToggle = {() => selectDestinations('insideFlow')}
-                    >
-                        Inside Selection
-                    </FilterToggle>
-                    <FilterToggle
-                        name = 'outsideFlow'
-                        active = {appState.destinations === 'outsideFlow'}
-                        onToggle = {() => selectDestinations('outsideFlow')}
-                    >
-                        Outside Selection
-                    </FilterToggle>
-                    <FilterToggle
-                        name = 'overlays'
-                        active = {appState.destinations === 'overlays'}
-                        onToggle = {() => selectDestinations('overlays')}
-                    >
-                        Overlays
-                    </FilterToggle>
-                </StepAccordion>
+                        <MenuButton 
+                            active = {appState.destinations === 'all'}
+                            onClick = {() => selectDestinations('all')}
+                        >
+                            All
+                        </MenuButton>
+                        <MenuButton
+                            active = {appState.destinations === 'insideFlow'}
+                            onClick = {() => selectDestinations('insideFlow')}
+                        >
+                            Inside Selection
+                        </MenuButton>
+                        <MenuButton
+                            active = {appState.destinations === 'outsideFlow'}
+                            onClick = {() => selectDestinations('outsideFlow')}
+                        >
+                            Outside Selection
+                        </MenuButton>
+                        <MenuButton
+                            active = {appState.destinations === 'overlays'}
+                            onClick = {() => selectDestinations('overlays')}
+                        >
+                            Overlays
+                        </MenuButton>
+                    </Page>
 
-                <StepAccordion
-                    title = 'Objects'
-                    isDisabled = {!appState.mode}
-                    isOpen = {appState.uiStep === '4-component-filters'}
-                    onToggle = {() => setAppState({...appState, uiStep: '4-component-filters'})}
-                    onForward = {() => setAppState({...appState, uiStep: '5-trigger-filters'})}
-                    onBackward = {() => setAppState({...appState, uiStep: '3-destination-filters'})}
-                >
-                    <FilterToggle
-                        name = 'objects'
-                        active = {appState.objects === 'all'}
-                        onToggle = {() => selectObjects('all')}
+                    <Page
+                        active = {appState.uiStep === '4-component-filters'}
                     >
-                        All
-                    </FilterToggle>
-                    <FilterToggle
-                        name = 'objects'
-                        active = {appState.objects === 'components'}
-                        onToggle = {() => selectObjects('components')}
-                    >
-                        Components
-                    </FilterToggle>
-                    <FilterToggle
-                        name = 'noncomponents'
-                        active = {appState.objects === 'noncomponents'}
-                        onToggle = {() => selectObjects('noncomponents')}
-                    >
-                        Non-Components
-                    </FilterToggle>
-                </StepAccordion>
+                        <MenuButton
+                            active = {appState.objects === 'all'}
+                            onClick = {() => selectObjects('all')}
+                        >
+                            All
+                        </MenuButton>
+                        <MenuButton
+                            active = {appState.objects === 'components'}
+                            onClick = {() => selectObjects('components')}
+                        >
+                            Components
+                        </MenuButton>
+                        <MenuButton
+                            active = {appState.objects === 'noncomponents'}
+                            onClick = {() => selectObjects('noncomponents')}
+                        >
+                            Non-Components
+                        </MenuButton>
+                    </Page>
 
-                <StepAccordion
-                    title = 'Triggers' 
-                    isDisabled = {!appState.mode}
-                    isOpen = {appState.uiStep === '5-trigger-filters'}
-                    onToggle = {() => setAppState({...appState, uiStep: '5-trigger-filters'})}
-                    onBackward = {() => setAppState({...appState, uiStep: '4-component-filters'})}
-                >
-                    <FilterToggle
-                        name = 'onClicks'
-                        active = {appState.triggers.onClicks}
-                        onToggle = {toggleOnClicks}
+                    <Page
+                        active = {appState.uiStep === '5-trigger-filters'}
                     >
-                        On Clicks
-                    </FilterToggle>
-                    <FilterToggle
-                        name = 'onMouseEnters'
-                        active = {appState.triggers.onMouseEnters}
-                        onToggle = {toggleOnMouseEnters}
-                    >
-                        On Mouse Enters
-                    </FilterToggle>
-                    <FilterToggle
-                        name = 'onMouseLeaves'
-                        active = {appState.triggers.onMouseLeaves}
-                        onToggle = {toggleOnMouseLeaves}
-                    >
-                        On Mouse Leaves
-                    </FilterToggle>
-                    <FilterToggle
-                        name = 'afterDelays'
-                        active = {appState.triggers.afterDelays}
-                        onToggle = {toggleAfterDelays}
-                    >
-                        After Delays
-                    </FilterToggle>
-                </StepAccordion>
+                        <FilterToggle
+                            name = 'onClicks'
+                            active = {appState.triggers.onClicks}
+                            onToggle = {toggleOnClicks}
+                        >
+                            On Clicks
+                        </FilterToggle>
+                        <FilterToggle
+                            name = 'onMouseEnters'
+                            active = {appState.triggers.onMouseEnters}
+                            onToggle = {toggleOnMouseEnters}
+                        >
+                            On Mouse Enters
+                        </FilterToggle>
+                        <FilterToggle
+                            name = 'onMouseLeaves'
+                            active = {appState.triggers.onMouseLeaves}
+                            onToggle = {toggleOnMouseLeaves}
+                        >
+                            On Mouse Leaves
+                        </FilterToggle>
+                        <FilterToggle
+                            name = 'afterDelays'
+                            active = {appState.triggers.afterDelays}
+                            onToggle = {toggleAfterDelays}
+                        >
+                            After Delays
+                        </FilterToggle>
+                    </Page>
+                </PageCarousel>
 
                 {appState.uiStep === '6-confirmation' && (<div>
                     <h1>Changes applied</h1>
                 </div>)}
 
-            </AccordionStretchContainer>
+            </BodyContainer>
 
             {/* {appState.mode && ( */}
             <div>

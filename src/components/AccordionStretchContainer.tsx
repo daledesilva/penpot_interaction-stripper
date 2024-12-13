@@ -3,12 +3,12 @@ import React, { FC, ReactNode } from 'react';
 ////////////////////////
 ////////////////////////
 
-interface AccordionStretchContainerProps {
+interface BodyContainerProps {
     children?: ReactNode;
     style?: React.CSSProperties;
 }
 
-const AccordionStretchContainer: FC<AccordionStretchContainerProps> = ({ children, style }) => {
+const BodyContainer: FC<BodyContainerProps> = ({ children, style }) => {
     return (
         <div style={{
             display: 'flex',
@@ -20,4 +20,4 @@ const AccordionStretchContainer: FC<AccordionStretchContainerProps> = ({ childre
     );
 };
 
-export default AccordionStretchContainer;
+export default BodyContainer;
