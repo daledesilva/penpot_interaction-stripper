@@ -22,6 +22,7 @@ const MenuButton: FC<MenuButtonProps> = ({ active, onClick: filter, children }) 
                     padding: "8px 14px",
                     cursor: "pointer",
                     fontSize: "1em",
+                    fontWeight: 100,
                 }}
             >
                 {children}

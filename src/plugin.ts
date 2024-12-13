@@ -35,7 +35,7 @@ let expectedSelectionIds: string[] = [];
 ///////////
 
 penpot.ui.open("Interaction Stripper", `?theme=${penpot.theme}`, {
-	width: 240,
+	width: 210,
 	height: 300,
 });
 

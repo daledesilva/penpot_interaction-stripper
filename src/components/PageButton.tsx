@@ -19,7 +19,7 @@ const PageButton: FC<PageButtonProps> = ({ isActive, onClick, children }) => {
                     color: isActive ? 'white' : 'grey',
                     fontSize: '12px',
                     cursor: 'pointer',
-                    padding: 0,
+                    padding: '0 0 10px 0',
                     margin: 0,
                 }}
                 onClick={onClick}

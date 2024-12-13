@@ -15,8 +15,8 @@ const HISTORY_LENGTH = 5;
 ///////////
 ///////////
 export interface AppState {
-    uiStep:   '1-no-selection'
-            | '2-filter-mode'
+    userSelection: boolean,
+    uiStep:   '2-filter-mode'
             | '3-destination-filters'
             | '4-component-filters'
             | '5-trigger-filters'
@@ -34,8 +34,9 @@ export interface AppState {
 }
 
 const initialUiState: AppState = {
-    uiStep: '1-no-selection',
-    mode: null,
+    userSelection: false,
+    uiStep: '3-destination-filters',
+    mode: 'existing-interactions',
     destinations: 'all',
     objects: 'all',
     triggers: {
@@ -44,7 +45,7 @@ const initialUiState: AppState = {
         onMouseLeaves: false,
         afterDelays: false
     },
-    isActionable: false,
+    isActionable: true,
 }
     
 
@@ -68,7 +69,8 @@ const App: FC<AppProps> = ({ children }) => {
 
                 const newUiState = JSON.parse(JSON.stringify(initialUiState));
                 if(event.data.selectionIds.length) {
-                    newUiState.uiStep = '2-filter-mode';
+                    newUiState.uiStep = '3-destination-filters';
+                    newUiState.userSelection = true;
                 }
                 setAppState(newUiState);
                 console.log('appStateHistory', appStateHistory.current);
@@ -87,32 +89,34 @@ const App: FC<AppProps> = ({ children }) => {
             gap: '15px'
         }}>
 
-                <PageCarouselMenu>
-                    <PageButton
-                        isActive = {appState.uiStep === '2-filter-mode'}
-                        onClick = {() => setAppState({...appState, uiStep: '2-filter-mode'})}
-                    >
-                        Mode
-                    </PageButton>
-                    <PageButton
-                        isActive = {appState.uiStep === '3-destination-filters'}
-                        onClick = {() => setAppState({...appState, uiStep: '3-destination-filters'})}
-                    >
-                        Destinations
-                    </PageButton>
-                    <PageButton
-                        isActive = {appState.uiStep === '4-component-filters'}
-                        onClick = {() => setAppState({...appState, uiStep: '4-component-filters'})}
-                    >
-                        Objects
-                    </PageButton>
-                    <PageButton
-                        isActive = {appState.uiStep === '5-trigger-filters'}
-                        onClick = {() => setAppState({...appState, uiStep: '5-trigger-filters'})}
-                    >
-                        Triggers
-                    </PageButton>
-                </PageCarouselMenu>
+                {appState.userSelection && (
+                    <PageCarouselMenu>
+                            {/* <PageButton
+                                isActive = {appState.uiStep === '2-filter-mode'}
+                            onClick = {() => setAppState({...appState, uiStep: '2-filter-mode'})}
+                        >
+                            Mode
+                        </PageButton> */}
+                        <PageButton
+                            isActive = {appState.uiStep === '3-destination-filters'}
+                            onClick = {() => setAppState({...appState, uiStep: '3-destination-filters'})}
+                        >
+                            Destinations
+                        </PageButton>
+                        <PageButton
+                            isActive = {appState.uiStep === '4-component-filters'}
+                            onClick = {() => setAppState({...appState, uiStep: '4-component-filters'})}
+                        >
+                            Objects
+                        </PageButton>
+                        <PageButton
+                            isActive = {appState.uiStep === '5-trigger-filters'}
+                            onClick = {() => setAppState({...appState, uiStep: '5-trigger-filters'})}
+                        >
+                            Triggers
+                        </PageButton>
+                    </PageCarouselMenu>
+                )}
 
             <BodyContainer
                 style = {{
@@ -127,14 +131,24 @@ const App: FC<AppProps> = ({ children }) => {
                 >
 
                     <Page
-                        active = {appState.uiStep === '1-no-selection'}
+                        active = {!appState.userSelection}
                     >
-                        <p>Select an object to begin...</p>
+                        <p
+                            style={{
+                                textAlign: 'center',
+                                fontSize: '25px',
+                                lineHeight: '1.3em',
+                                fontWeight: 100,
+                                color: '#888',
+                                background: 'none',
+                            }}
+                        >
+                            Select objects or frames to begin...</p>
                     </Page>
 
 
                     <Page
-                        active = {appState.uiStep === '2-filter-mode'}
+                        active = {appState.userSelection && appState.uiStep === '2-filter-mode'}
                     >
                         <MenuButton
                             active = {appState.mode === 'existing-interactions'}
@@ -157,7 +171,7 @@ const App: FC<AppProps> = ({ children }) => {
                     </Page>
             
                     <Page
-                        active = {appState.uiStep === '3-destination-filters'}
+                        active = {appState.userSelection && appState.uiStep === '3-destination-filters'}
                     >
                         <MenuButton 
                             active = {appState.destinations === 'all'}
@@ -186,7 +200,7 @@ const App: FC<AppProps> = ({ children }) => {
                     </Page>
 
                     <Page
-                        active = {appState.uiStep === '4-component-filters'}
+                        active = {appState.userSelection && appState.uiStep === '4-component-filters'}
                     >
                         <MenuButton
                             active = {appState.objects === 'all'}
@@ -209,7 +223,7 @@ const App: FC<AppProps> = ({ children }) => {
                     </Page>
 
                     <Page
-                        active = {appState.uiStep === '5-trigger-filters'}
+                        active = {appState.userSelection && appState.uiStep === '5-trigger-filters'}
                     >
                         <FilterToggle
                             name = 'onClicks'
@@ -248,16 +262,16 @@ const App: FC<AppProps> = ({ children }) => {
 
             </BodyContainer>
 
-            {/* {appState.mode && ( */}
-            <div>
-                <ActionButton
-                    onClick = {removeInteractions}
-                    disabled = {!appState.isActionable}
-                >
-                    Strip Interactions
-                </ActionButton>
-            </div>
-            {/* )} */}
+            {appState.userSelection && (
+                <div>
+                    <ActionButton
+                        onClick = {removeInteractions}
+                        disabled = {!appState.isActionable}
+                    >
+                        Strip Interactions
+                    </ActionButton>
+                </div>
+            )}
         </div>
     </>);
 
