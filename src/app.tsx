@@ -9,10 +9,10 @@ import { atom, useAtom, useAtomValue } from 'jotai'
 export type UserSelection = 'none' | 'boards';
 export type ObjectType = 'any objects' | 'components' | 'non-components' | 'boards';
 export type DestinationType = 'anywhere' | 'within the selection' | 'outside the selection' | 'overlays' | 'to previous screens' | 'to urls';
-export type TriggerTypes = 'any interactions' | 'clicks' | 'mouse enters' | 'mouse leaves' | 'after delays';
+export type TriggerType = 'any interactions' | 'clicks' | 'mouse enters' | 'mouse leaves' | 'after delays';
 
 export const userSelectionAtom = atom<UserSelection>('none');
-export const triggerTypesAtom = atom<TriggerTypes>('any interactions');
+export const triggerTypeAtom = atom<TriggerType>('any interactions');
 export const destinationTypeAtom = atom<DestinationType>('anywhere');
 export const objectTypeAtom = atom<ObjectType>('any objects');
 
@@ -22,7 +22,7 @@ interface AppProps {
 
 const App: FC<AppProps> = () => {
     const [userSelection, setUserSelection] = useAtom(userSelectionAtom);
-    const triggerTypes = useAtomValue(triggerTypesAtom);
+    const triggerTypes = useAtomValue(triggerTypeAtom);
     const destinationType = useAtomValue(destinationTypeAtom);
     const objectType = useAtomValue(objectTypeAtom);
 

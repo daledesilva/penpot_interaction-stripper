@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 import React, { FC, ReactNode } from 'react';
-import { destinationTypeAtom, objectTypeAtom, triggerTypesAtom } from '../app';
+import { destinationTypeAtom, objectTypeAtom, triggerTypeAtom } from '../app';
 
 ////////////////////////////
 ////////////////////////////
@@ -88,7 +88,7 @@ export const DestText: FC<StyledTextProps> = () => {
 }
 
 export const TriggerText: FC<StyledTextProps> = () => {
-    const [triggerTypes, setTriggerTypes] = useAtom(triggerTypesAtom);
+    const [triggerTypes, setTriggerTypes] = useAtom(triggerTypeAtom);
 
     return (
         <a
