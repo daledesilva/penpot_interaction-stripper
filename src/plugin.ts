@@ -16,12 +16,14 @@ import { filterToUrls } from "./logic/filter-to-urls";
 import { filterToAnyInteractions } from "./logic/filter-to-any-interactions";
 import { filterToBoards } from "./logic/filter-to-boards";
 import { removeInteractions } from "./logic/remove-interactions";
+import { getAllShapesRecursively } from "./logic/get-all-shapes-recursively";
+import { getAllBoardsRecursively } from "./logic/get-all-boards-recursively";
 
 ///////////////////////////////////////
 ///////////////////////////////////////
 
 type Selection = Shape[];
-let expectedSelectionIds: string[] = [];
+// let expectedSelectionIds: string[] = [];
 let selectionFromUser: Selection = penpot.selection;
 
 ///////////
@@ -33,7 +35,7 @@ penpot.ui.open("Interaction Stripper", `?theme=${penpot.theme}`, {
 });
 
 setTimeout(() => {
-	expectedSelectionIds = sendAppSelectionIds();
+	sendAppSelectionIds();
 }, 500);
 
 interface RemoveInteractionsProps {
@@ -59,9 +61,10 @@ penpot.ui.onMessage<Message>((message) => {
 			destinationType
 		} = message.data;
 
-		let filteredShapes = selectionFromUser.map(shape => shape);
+		let filteredShapes = getAllShapesRecursively(selectionFromUser);
+		let boardsInSelection = getAllBoardsRecursively(selectionFromUser);
 
-		console.log('filteredShapes 1', filteredShapes.map(shape => shape.name));
+		// verbose(['All shapes', filteredShapes.map(shape => shape.name)]);
 
 		// Trigger filter messages
 		if (triggerTypes === 'any interactions') {
@@ -80,7 +83,7 @@ penpot.ui.onMessage<Message>((message) => {
 			filteredShapes = filterToAfterDelays(filteredShapes);
 		}
 
-		console.log('filteredShapes 2', filteredShapes.map(shape => shape.name));
+		// verbose(['Filtered by trigger', filteredShapes.map(shape => shape.name)]);
 
 		// Destination filter messages
 		if (destinationType === 'anywhere') {
@@ -89,13 +92,13 @@ penpot.ui.onMessage<Message>((message) => {
 		} else if (destinationType === 'outside the selection') {
 			filteredShapes = filterToNonFlowShapes({
 				_shapesToFilter: filteredShapes,
-				_originalUserSelection: selectionFromUser
+				_boards: boardsInSelection,
 			});
 
 		} else if (destinationType === 'within the selection') {
 			filteredShapes = filterToFlowShapes({
 				_shapesToFilter: filteredShapes,
-				_originalUserSelection: selectionFromUser
+				_boards: boardsInSelection
 			});
 
 		} else if (destinationType === 'overlays') {
@@ -114,7 +117,7 @@ penpot.ui.onMessage<Message>((message) => {
 			});
 		}
 
-		console.log('filteredShapes 3', filteredShapes.map(shape => shape.name));
+		// verbose(['Filtered by destination', filteredShapes.map(shape => shape.name)]);
 
 		// Object filter messages
 		if (objectType === 'any objects') {
@@ -134,7 +137,8 @@ penpot.ui.onMessage<Message>((message) => {
 		// penpot.selection = filteredShapes;
 		// ignoreRecentSelectionChange();
 
-		console.log('filteredShapes 4', filteredShapes.map(shape => shape.name));
+		// verbose(['Filtered by object', filteredShapes.map(shape => shape.name)]);
+
 		const undoBlock = penpot.history.undoBlockBegin();
 		removeInteractions({
 			shapes: filteredShapes,
@@ -157,9 +161,9 @@ penpot.on('selectionchange', (newSelectionIds: string[]) => {
 	}, 500);
 
 });
-function ignoreRecentSelectionChange() {
-	expectedSelectionIds = penpot.selection.map((shape) => shape.id);
-}
+// function ignoreRecentSelectionChange() {
+// 	expectedSelectionIds = penpot.selection.map((shape) => shape.id);
+// }
 function sendAppSelectionIds(_selectionIds?: string[]): string[] {
 	let selectionIds = _selectionIds || penpot.selection.map((shape) => shape.id);
 	penpot.ui.sendMessage({

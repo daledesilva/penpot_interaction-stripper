@@ -1,4 +1,4 @@
-import { Board, Group, Shape } from "@penpot/plugin-types";
+import { Shape } from "@penpot/plugin-types";
 import { filterToComponents } from "./filter-to-components";
 
 //////////////
@@ -21,18 +21,6 @@ export function filterToMissingInteractions(shapes: Shape[]): Shape[] {
             componentsWithMissingInteractions.push(shape);
             return;
         }
-
-        // TODO: Should this look deeper? - What's the user's expectation?
-        // // If it contains other shapes, recursively check it's children
-        // if(penpot.utils.types.isBoard(shape)) {
-        //     const board = shape as Board;
-        //     const childShapesWithInteractions = filterToMissingInteractions(board.children);
-        //     componentsWithAlteredInteractions.push(...childShapesWithInteractions);
-        // } else if(penpot.utils.types.isGroup(shape)) {
-        //     const group = shape as Group;
-        //     const childShapesWithInteractions = filterToMissingInteractions(group.children);
-        //     componentsWithAlteredInteractions.push(...childShapesWithInteractions);
-        // }
     })
 
     return componentsWithMissingInteractions;

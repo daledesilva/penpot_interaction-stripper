@@ -1,4 +1,4 @@
-import { Board, Group, Shape } from "@penpot/plugin-types";
+import { Shape } from "@penpot/plugin-types";
 import { filterToComponents } from "./filter-to-components";
 
 //////////////
@@ -18,7 +18,6 @@ export function filterToAlteredInteractions(shapes: Shape[]): Shape[] {
         // Iterate through all original interactions to make sure they're the same in the instance.
         for(let i=0; i<=sameShapeInMainInstance.interactions.length; i++) {
             const mainInteraction = sameShapeInMainInstance.interactions[i];
-            const instanceIteraction = shape.interactions[i];
             
             console.log('mainInteraction', mainInteraction);
         }

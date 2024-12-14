@@ -1,4 +1,3 @@
-import { Check, X } from 'lucide-react';
 import React, { FC, ReactNode } from 'react';
 
 ////////////////////////
@@ -12,7 +11,7 @@ interface AddRemoveButtonProps {
     size?: string;
 }
 
-const AddRemoveButton: FC<AddRemoveButtonProps> = ({ active, onClick, children, style, size }) => {
+const AddRemoveButton: FC<AddRemoveButtonProps> = ({ active, onClick, style }) => {
     return (
         <button 
             onClick={onClick}

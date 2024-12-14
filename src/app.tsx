@@ -1,7 +1,7 @@
 import React, { FC, ReactNode, useEffect } from 'react';
 import ActionButton from './components/ActionButton';
 import { ObjectText, DestText, TriggerText, FocusText } from './components/StyledText';
-import { atom, useAtom } from 'jotai'
+import { atom, useAtom, useAtomValue } from 'jotai'
 
 ///////////
 ///////////
@@ -12,19 +12,19 @@ export type DestinationType = 'anywhere' | 'within the selection' | 'outside the
 export type TriggerTypes = 'any interactions' | 'clicks' | 'mouse enters' | 'mouse leaves' | 'after delays';
 
 export const userSelectionAtom = atom<UserSelection>('none');
-export const objectTypeAtom = atom<ObjectType>('any objects');
-export const destinationTypeAtom = atom<DestinationType>('outside the selection');
 export const triggerTypesAtom = atom<TriggerTypes>('any interactions');
+export const destinationTypeAtom = atom<DestinationType>('anywhere');
+export const objectTypeAtom = atom<ObjectType>('any objects');
 
 interface AppProps {
     children?: ReactNode;
 }
 
-const App: FC<AppProps> = ({ children }) => {
+const App: FC<AppProps> = () => {
     const [userSelection, setUserSelection] = useAtom(userSelectionAtom);
-    const [triggerTypes, setTriggerTypes] = useAtom(triggerTypesAtom);
-    const [destinationType, setDestinationType] = useAtom(destinationTypeAtom);
-    const [objectType, setObjectType] = useAtom(objectTypeAtom);
+    const triggerTypes = useAtomValue(triggerTypesAtom);
+    const destinationType = useAtomValue(destinationTypeAtom);
+    const objectType = useAtomValue(objectTypeAtom);
 
     useEffect(() => {
 
@@ -74,7 +74,7 @@ const App: FC<AppProps> = ({ children }) => {
                         Select <FocusText>boards</FocusText> to begin...
                     </>)}
                     {userSelection === 'boards' && (<>
-                        <TriggerText/> that transition <DestText/> from <ObjectText/>... 
+                        <TriggerText/> that transition <DestText/> from <ObjectText/>...
                     </>)}
                 </p>
 
