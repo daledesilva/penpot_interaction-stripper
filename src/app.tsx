@@ -2,7 +2,6 @@ import React, { FC, ReactNode, useEffect } from 'react';
 import ActionButton from './components/ActionButton';
 import { ObjectText, DestText, TriggerText, FocusText } from './components/StyledText';
 import { atom, useAtom, useAtomValue } from 'jotai'
-import mixpanel from "mixpanel-browser";
 
 ///////////
 ///////////
@@ -46,13 +45,6 @@ const App: FC<AppProps> = () => {
                 event.preventDefault();
                 undoInPenpot();
             }
-        });
-
-        mixpanel.init(import.meta.env.VITE_MIXPANEL_TOKEN, {
-            debug: true,
-            track_pageview: true,
-            persistence: "localStorage",
-            disable_persistence: true,
         });
 
     }, []);
