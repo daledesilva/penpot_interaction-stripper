@@ -1,6 +1,6 @@
 {
-  "name": "Interactivity Stripper",
+  "name": "Interaction Stripper",
   "code": "plugin.js",
-  "description": "This is a starter plugin for Penpot",
+  "description": "This allows you to remove interactions from your shapes in bulk - based on how they affect the flow and more.",
   "permissions": ["content:read", "content:write"]
 }
