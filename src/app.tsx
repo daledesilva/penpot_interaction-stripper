@@ -7,14 +7,6 @@ import mixpanel from "mixpanel-browser";
 ///////////
 ///////////
 
-mixpanel.init(process.env.MIXPANEL_TOKEN, {
-    debug: true,
-    track_pageview: true,
-    persistence: "localStorage",
-});
-
-///////////
-
 export type UserSelection = 'none' | 'boards';
 export type ObjectType = 'any objects' | 'components' | 'non-components' | 'boards';
 export type DestinationType = 'anywhere' | 'within the selection' | 'outside the selection' | 'overlays' | 'to previous screens' | 'to urls';
@@ -54,6 +46,13 @@ const App: FC<AppProps> = () => {
                 event.preventDefault();
                 undoInPenpot();
             }
+        });
+
+        mixpanel.init(import.meta.env.VITE_MIXPANEL_TOKEN, {
+            debug: true,
+            track_pageview: true,
+            persistence: "localStorage",
+            disable_persistence: true,
         });
 
     }, []);
