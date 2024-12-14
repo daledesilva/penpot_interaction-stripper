@@ -23,10 +23,10 @@ export function filterToNonFlowShapes(props: {
     
     // If the original user selection is passed in, get any boards that are direct children
     if(_originalUserSelection) {
-        addToBoards(boards, _originalUserSelection);
+        addToBoards({_existingBoards: boards, _shapes: _originalUserSelection});
     };
     // If any of the shapes to filter are boards, add them to the list
-    addToBoards(boards, _shapesToFilter);
+    addToBoards({_existingBoards: boards, _shapes: _shapesToFilter});
 
     // Iterate through all shapes
     _shapesToFilter.forEach( (shape) => {
@@ -38,28 +38,6 @@ export function filterToNonFlowShapes(props: {
             if(action.type === 'navigate-to') {
                 const destIsInFlow = boards.some( (board) => board.id === action.destination.id );
                 if(!destIsInFlow) nonFlowShapes.push(shape);
-
-            } else if(action.type === 'open-overlay') {
-                // TODO: Probably should be optional
-                const destIsInFlow = boards.some( (board) => board.id === action.destination.id );
-                if(!destIsInFlow) nonFlowShapes.push(shape);
-
-            } else if(action.type === 'toggle-overlay') {
-                // TODO: Probably should be optional
-                const destIsInFlow = boards.some( (board) => board.id === action.destination.id );
-                if(!destIsInFlow) nonFlowShapes.push(shape);
-                
-            } else if(action.type === 'close-overlay') {
-                // Including because overlays are irrelevant to the flow
-                // TODO: But should be user optional
-                nonFlowShapes.push(shape);
-
-            } else if(action.type === 'previous-screen') {
-                // TODO: Optionally include back buttons
-                nonFlowShapes.push(shape); // Included by default as it can only go back to things in the flow
-
-            } else if(action.type === 'open-url') {
-                // TODO: Optionally include external links
             }
             
         });

@@ -1,14 +1,18 @@
-import { AppState } from "../app";
+
 
 //////////////////////////
 //////////////////////////
 
-export function applyFilters(appState: AppState) {
-    if(appState.mode === null) return;
+interface RemoveInteractionsProps {
+    triggerTypes: string,
+    objectType: string,
+    destinationType: string
+}
 
+export function removeInteractions(filterProps: RemoveInteractionsProps) {
     parent.postMessage({
         action: 'apply-filters',
-        data: appState
+        data: filterProps
     }, '*');
 }
 

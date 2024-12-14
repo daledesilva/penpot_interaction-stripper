@@ -3,7 +3,7 @@ import { Board, Shape } from "@penpot/plugin-types";
 //////////////////////////
 //////////////////////////
 
-export function addToBoards(_existingBoards: Board[], _shapes: Shape[]) {
+export function addToBoards({_existingBoards, _shapes}: {_existingBoards: Board[], _shapes: Shape[]}) {
 
     _shapes.forEach((shape) => {
         if (penpot.utils.types.isBoard(shape)) {

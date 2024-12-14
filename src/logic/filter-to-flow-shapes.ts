@@ -23,10 +23,10 @@ export function filterToFlowShapes(props: {
     
     // If the original user selection is passed in, get any boards that are direct children
     if(_originalUserSelection) {
-        addToBoards(boards, _originalUserSelection);
+        addToBoards({_existingBoards: boards, _shapes: _originalUserSelection});
     };
     // If any of the shapes to filter are boards, add them to the list
-    addToBoards(boards, _shapesToFilter);
+    addToBoards({_existingBoards: boards, _shapes: _shapesToFilter});
 
 
     // Iterate through all shapes
@@ -39,30 +39,6 @@ export function filterToFlowShapes(props: {
             if(action.type === 'navigate-to') {
                 const destIsInFlow = boards.some( (board) => board.id === action.destination.id );
                 if(destIsInFlow) flowShapes.push(shape);
-
-            } else if(action.type === 'open-overlay') {
-                // TODO: Probably should be optional
-                const destIsInFlow = boards.some( (board) => board.id === action.destination.id );
-                if(destIsInFlow) flowShapes.push(shape);
-
-            } else if(action.type === 'toggle-overlay') {
-                // TODO: Probably should be optional
-                const destIsInFlow = boards.some( (board) => board.id === action.destination.id );
-                if(destIsInFlow) flowShapes.push(shape);
-                
-            } else if(action.type === 'close-overlay') {
-                // TODO: Could this only close overlays in the flow?
-                // Not sure if should be optional.
-                // const destIsInFlow = boards.some( (board) => board.id === action.destination?.id );
-                // if(destIsInFlow) flowShapes.push(shape);
-                flowShapes.push(shape);
-
-            } else if(action.type === 'previous-screen') {
-                // TODO: Optionally include back buttons
-                flowShapes.push(shape); // Included by default as it can only go back to things in the flow
-
-            } else if(action.type === 'open-url') {
-                // TODO: Optionally include external links
             }
             
         });
@@ -85,5 +61,6 @@ export function filterToFlowShapes(props: {
         return index === self.findIndex( (t) => t.id === shape.id );
     });
 
+    // console.log('flowShapes', flowShapes.map(shape => shape.name));
     return flowShapes;
 }
