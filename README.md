@@ -7,9 +7,9 @@ Easily copy a flow and strip its superfluous interactions for a clearer journey 
 
 Affected interactions are filterable; Limit to those of **particular journeys**, those that interact with **overlays**, or those using a **certain trigger**, and **more**.
 
-<div style="display: flex; flex-direction: row; gap: 10px; margin-bottom: 3em;">
-  <img src="./docs/media/interaction_stripper_image-1.png" alt="Example action: Clicks that transition outside the selection from components." style="width: 50%;">
-  <img src="./docs/media/interaction_stripper_image-3.png" alt="Example action: Mouse enters that transition overlays from components." style="width: 50%;">
+<div style="display: flex; flex-direction: row; gap: 1%; margin-bottom: 3em;">
+  <img src="./docs/media/interaction_stripper_image-1.png" alt="Example action: Clicks that transition outside the selection from components." style="width: 49%;">
+  <img src="./docs/media/interaction_stripper_image-3.png" alt="Example action: Mouse enters that transition overlays from components." style="width: 49%;">
 </div>
 
 ---
