@@ -19,7 +19,6 @@ export function filterToUrls(props: {
         shape.interactions.forEach((interaction) => {
             const action = interaction.action;
             
-            debug(['action.type', action.type]);
             if (action.type === 'open-url') {
                 urlShapes.push(shape);
             }

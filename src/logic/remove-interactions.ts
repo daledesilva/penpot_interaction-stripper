@@ -11,9 +11,6 @@ interface RemoveInteractionsFilters {
 }
 
 export function removeInteractions({shapes, triggerTypes}: RemoveInteractionsFilters) {
-    debug(['removing interactions']);
-    debug(['shapes', shapes]);
-    debug(['triggerTypes', triggerTypes]);
 
     shapes.forEach( (shape) => {
         for(let i=shape.interactions.length-1; i>=0; i--) {

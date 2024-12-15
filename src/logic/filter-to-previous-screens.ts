@@ -16,7 +16,6 @@ export function filterToPreviousScreens(props: {
         shape.interactions.forEach((interaction) => {
             const action = interaction.action;
             
-            debug(['action.type', action.type]);
             if (action.type === 'previous-screen') {
                 previousScreenShapes.push(shape);
             }
