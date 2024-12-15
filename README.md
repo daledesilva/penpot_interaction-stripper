@@ -1,141 +1,88 @@
-# Penpot Plugin Starter Template
+# Interaction Stripper
 
-This repository is designed to be your starting point for creating plugins for Penpot. It includes everything you need to get started quickly with development and build processes, so you can focus solely on coding. The template uses Vite as the bundler and comes pre-configured with TypeScript, though you can write your code in vanilla JavaScript if you prefer, while keeping TypeScript to handle Penpot typings in the `plugin.ts` file.
+Interaction Stripper is a plugin for Penpot that enables bulk removal of interactions across selected boards.
+Easily copy a flow and strip its superfluous interactions for a clearer journey demonstration.
 
-## Pre-requisites
+![Example action: Any interactions that transition outside the selection from any objects.](./docs/media/interaction_stripper_image-2.png)
 
-- Node.js and npm (<a href="https://nodejs.org/en/download/package-manager" target="_blank">Download</a>).
-- Git (<a href="https://git-scm.com/downloads" target="_blank">Download</a>).
-- Visual Studio Code (<a href="https://code.visualstudio.com/download" target="_blank">Download</a>) or similar.
-- Basic HTML, CSS and javascript knowledge.
+Affected interactions are filterable; Limit to those of **particular journeys**, those that interact with **overlays**, or those using a **certain trigger**, and **more**.
 
-## Folders and Files
+<div style="display: flex; flex-direction: row; gap: 10px; margin-bottom: 3em;">
+  <img src="./docs/media/interaction_stripper_image-1.png" alt="Example action: Clicks that transition outside the selection from components." style="width: 50%;">
+  <img src="./docs/media/interaction_stripper_image-3.png" alt="Example action: Mouse enters that transition overlays from components." style="width: 50%;">
+</div>
 
-- **`/`**: the root directory containing important files like `index.html`, the entry point for your plugin, along with configuration files such as `tsconfig.json` or `package.json`.
+---
 
-- **`public/`**: includes static assets like `manifest.json` for plugin metadata.
+# For more information and demos, [designdebt.club](https://designdebt.club/projects/penpot-interaction-stripper/)...
 
-- **`src/`**: contains the core source files for your plugin.
 
-- **`node_modules/`**: contains external dependencies used for development, installed via npm.
+## 📓 Development Diaries
+I record regular development diaries. [Subscribe and follow along](https://www.youtube.com/@designdebtclub) to see features in development.
 
-- **`dist/`**: the output directory generated after the build process, containing the production-ready plugin files for deployment.
+<p align="center">
+    <a href="https://youtube.com/playlist?list=PLAiv7XV4xFx2NMRSCxdGiVombKO-TiMAL&si=TarnAk9A4kzzy0Gu" target="_blank">
+        <img src="docs/media/devdiary-screenshot.jpg" width="60%" alt="Screenshot of devdiary video"><br/>
+        Click to view development diaries
+    </a>
+</p>
 
-### What is typescript?
+## ⚠️ Be careful
+>As with many other plugins, this is a free gift to the community, provided 'as is' to help you out. While I'm doing my best to make it awesome (And I love feedback), there are always chances things might not work quite right. If you're worried, **copy or backup your boards** before running.
 
-TypeScript is like JavaScript with extra rules. These rules help you catch mistakes early, before you run your code. It makes your code more reliable and easier to manage, especially in big projects.
+## 🪳 Report a bug
+Found something that's not quite working right or do you have a feature request? Don't be shy, feel free to make some noise over on the [GitHub Issues](https://github.com/daledesilva/penpot_interaction-stripper/issues) page. But be sure to check if someone has already posted the same issue and comment on theirs if they have.
 
-We're using TypeScript to make working with the Penpot API easier, as it provides autocompletion and instant access to documentation.
+## ❤️ Support
+If you find this plugin saves you time or helps you in some way, please consider supporting my development of plugins and other free community material like this.
 
-### What are plugin.ts and plugin.js files?
+<p>
+  <a href="https://twitter.com/daledesilva" target="_blank_">
+    <img src="docs/media/twitter-btn.svg" height="40px" alt="Dale de Silva on Twitter">
+  </a>
+  <a href="https://indieweb.social/@daledesilva" target="_blank">
+    <img src="docs/media/mastodon-btn.svg" height="40px" alt="Dale de Silva on Mastodon">
+  </a>
+  <a href="https://www.threads.net/@daledesilva" target="_blank">
+    <img src="docs/media/threads-btn.svg" height="40px" alt="Dale de Silva on Threads">
+  </a>
+  <a href="https://bsky.app/profile/daledesilva.bsky.social" target="_blank">
+    <img src="docs/media/bluesky-btn.svg" height="40px" alt="Dale de Silva on Bluesky">
+  </a>
+  <a href="https://ko-fi.com/N4N3JLUCW" target="_blank">
+    <img src="docs/media/support-btn.svg" height="40px" alt="Support me on Ko-fi">
+  </a>
+</p>
 
-The `plugin.ts` file is where you write code to interact with the Penpot API using TypeScript. This file is then compiled into `plugin.js` which is the final JavaScript code that runs the plugin. You don't write `plugin.js` directly; it's generated from the `plugin.ts` file.
+## 🤖 My other work
+You can find links to my other projects on [designdebt.club](https://designdebt.club), where I blog about design and development, as well as release other plugins like this one. You can also find my writing at at [falterinresolute.com](https://falterinresolute.com) where I combine philosophy and animation.
 
-**Note that this is also the only file where you can use the Penpot object.** Do not try to use the Penpot object in your plugin interface scripts.
+<p>
+  <a href="https://designdebt.club" target="_blank">
+    <img src="docs/media/design-debt-club-btn.svg" height="50px" alt="Design Debt Club">
+  </a>
+  <a href="https://falterinresolute.com" target="_blank">
+    <img src="docs/media/falter-in-resolute-btn.svg" height="50px" alt="Falter In Resolute Blog">
+  </a>
+</p>
 
-### What is manifest.json file?
+## 🏛️ License
+>The plugin is open source, so feel free to snoop on the code or fork it for your own needs. It’s licensed under [AGPL 3.0](https://www.gnu.org/licenses/agpl-3.0.en.html), which essentially means that any modifications you make to it for public or commercial use must also be open-source under the same license.
 
-The `manifest.json` file contains the basic information about the plugin. It defines the plugin's name, description, the main code file, and the permissions it requires. The structure of the `manifest.json` file looks like this:
+## Forking and creating a variation
+After forking, cloning, and installing the dependencies. The below commands are what you'll need to get going.
+If you're new to coding or working with Penpot, you can find far more detailed instructions in [the original template repository](https://penpot.github.io/penpot-plugin-starter-template/).
 
-```json
-{
-  "name": "Your plugin name",
-  "description": "Your plugin description",
-  "code": "plugin-file.js",
-  "icon": "your-icon.png",
-  "permissions": [
-    "content:read",
-    "content:write",
-    "library:read",
-    "library:write",
-    "user:read"
-  ]
-}
-```
-
-This file is essential for the plugin to function correctly within Penpot.
-
-## Getting Started
-
-[![Watch the video how to use starter template](https://penpot.github.io/penpot-plugin-starter-template/plugin-starter-template.png)](https://penpot.github.io/penpot-plugin-starter-template/plugin-starter-template.mp4)
-
-### Use this template
-
-Click the "Use this template" button at the top of the GitHub repository page. That'll create a new repository in your account with all the template files.
-
-Now that your repository was created you can clone it in your machine to start working with it:
-
-```bash
-git clone <your-repository-url>
-```
-
-### Install Dependencies
-
-After cloning the repository, navigate into the project directory and install the necessary dependencies by running:
-
-```bash
-cd <your-project-name>
-npm install
-```
-
-This command installs all the required packages listed in the `package.json` file.
-
-### Configure the Plugin
-
-Next, you need to edit the plugin's configuration file:
-
-1. Open the `manifest.json` file located in the `/public` folder.
-2. Make any necessary changes to your `plugin.ts`file. Note that any modifications to this file require you to restart the development server for changes to take effect. You can check our repository <a href="https://github.com/penpot/penpot-plugins-samples" target="_blank">Penpot plugins samples</a> for specific examples.
-
-### Run the Development Server
-
-To start the development server, run the following command in your terminal:
-
+### Useful terminal commands
+Run development server:
 ```bash
 npm run dev
 ```
-
-Once the server is running, open your web browser and go to `http://localhost:4400` to view your plugin in action. Now it is ready to be loaded in Penpot with the url `http://localhost:4400/manifest.json`.
-
-### Load your local plugin
-
-To load and test your local plugin running on `http://localhost:4400`, follow these steps:
-
-1. **Open the Plugin Manager:** Use the shortcut `Ctrl + Alt + P` in any file to open the Plugin Manager modal.
-
-2. **Enter the manifest URL:** In the Plugin Manager, provide the URL for your local plugin's manifest file. For a local setup, this URL will be: `http://localhost:4400/manifest.json`.
-
-3. **Install the plugin:** After entering the URL, Penpot will attempt to install the plugin. If there are no issues, the plugin will be successfully installed.
-
-4. **Access the plugin:** Once installed, you can open and use the plugin directly from within Penpot whenever you need it.
-
-## Development
-
-### Technologies Used
-
-This plugin template uses several key technologies:
-
-- **TypeScript**
-- **Vite**
-- **Web Components**
-
-### Libraries Included
-
-The template includes two Penpot libraries to assist in your development:
-
-- `@penpot/plugin-styles`: <a href="https://www.npmjs.com/package/@penpot/plugin-styles" target="_blank">This library</a> provides utility functions and resources to help you style your components consistently with Penpot's design system.
-- `@penpot/plugin-types`: <a href="https://www.npmjs.com/package/@penpot/plugin-types" target="_blank">This library</a> includes types and API descriptions for interacting with the Penpot plugin API, facilitating the development of plugins that can communicate effectively with the Penpot app.
-
-## Deployment
-
-### Build your plugin
-
+The URL to load into Penpot during development:
+```
+http://localhost:4400/manifest.json
+```
+Build the plugin:
 ```bash
 npm run build
 ```
-
-### Deploy your plugin
-
-After successfully building your plugin, now you're ready to use your chosen platform to deploy it.
-
-Check our <a href="https://help.penpot.app/plugins/deployment/" target="_blank">Deployment guide</a> for more information about how to deploy your plugin in multiple platforms.
