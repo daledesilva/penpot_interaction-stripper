@@ -1,5 +1,7 @@
 import { Shape } from "@penpot/plugin-types";
-import { debug } from "../utils/log-to-console";
+
+//////////////////////////
+//////////////////////////
 
 export function filterToPreviousScreens(props: {
     _shapesToFilter: Shape[],

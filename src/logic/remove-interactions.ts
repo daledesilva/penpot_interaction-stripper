@@ -1,9 +1,8 @@
 import { Shape } from "@penpot/plugin-types";
 import { TriggerType } from "../app";
-import { debug } from "../utils/log-to-console";
 
-//////////////
-//////////////
+////////////////////////////
+////////////////////////////
 
 interface RemoveInteractionsFilters {
     shapes: Shape[],
