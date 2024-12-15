@@ -1,6 +1,7 @@
 import { useAtom } from 'jotai';
 import React, { FC, ReactNode } from 'react';
 import { destinationTypeAtom, objectTypeAtom, triggerTypeAtom } from '../app';
+import classNames from 'classnames';
 
 ////////////////////////////
 ////////////////////////////
@@ -30,14 +31,20 @@ export const ObjectText: FC<StyledTextProps> = () => {
                         break;
                 }
             }}
+            className = {classNames([
+                'ddc_is_hover-primary-fg',
+                'ddc_is_hover-underline',
+            ])}
             style={{
                 textDecoration: 'none',
             }}
         >
-            <span style={{
-                color: 'yellow',
-                fontWeight: 'bold',
-            }}>
+            <span
+                style={{
+                    color: 'var(--ddc_is_color-primary)',
+                    fontWeight: 'bold',
+                }}
+            >
                 {objectType}
             </span>
         </a>
@@ -73,12 +80,16 @@ export const DestText: FC<StyledTextProps> = () => {
                         break;
                 }
             }}
+            className = {classNames([
+                'ddc_is_hover-primary-fg',
+                'ddc_is_hover-underline',
+            ])}
             style={{
                 textDecoration: 'none',
             }}
         >
             <span style={{
-                color: 'yellow',
+                color: 'var(--ddc_is_color-primary)',
                 fontWeight: 'bold',
             }}>
                 {destinationType}
@@ -113,12 +124,16 @@ export const TriggerText: FC<StyledTextProps> = () => {
                         break;
                 }
             }}
+            className = {classNames([
+                'ddc_is_hover-primary-fg',
+                'ddc_is_hover-underline',
+            ])}
             style={{
                 textDecoration: 'none',
             }}
         >
             <span style={{
-                color: 'yellow',
+                color: 'var(--ddc_is_color-primary)',
                 fontWeight: 'bold',
             }}>
                 {triggerTypes}

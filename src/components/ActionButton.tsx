@@ -14,8 +14,9 @@ const ActionButton: FC<ActionButtonProps> = ({ onClick, children, style, disable
     return (
         <button
             onClick = {onClick}
+            className = 'ddc_is_hover-primary-bg'
             style = {{
-                backgroundColor: disabled ? "grey" : "yellow",
+                backgroundColor: disabled ? "grey" : "var(--ddc_is_color-primary)",
                 color: "black",
                 padding: "8px 16px",
                 border: "none",
