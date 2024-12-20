@@ -5,7 +5,7 @@ import { filterToComponents } from "./logic/filter-to-components";
 import { filterToNonComponents } from "./logic/filter-to-non-components";
 import { filterToFlowShapes } from "./logic/filter-to-flow-shapes";
 import { filterToNonFlowShapes } from "./logic/filter-to-non-flow-shapes";
-import { DestinationType, ObjectType, TriggerType } from "./app";
+import { DestinationTypes, ObjectTypes, TriggerTypes } from "./app";
 import { filterToOnClicks } from "./logic/filter-to-on-clicks";
 import { filterToOnMouseEnters } from "./logic/filter-to-on-mouse-enters";
 import { filterToOnMouseLeaves } from "./logic/filter-to-on-mouse-leaves";
@@ -39,9 +39,9 @@ setTimeout(() => {
 }, 500);
 
 interface RemoveInteractionsProps {
-	triggerTypes: TriggerType,
-	objectType: ObjectType,
-	destinationType: DestinationType
+	triggerTypes: TriggerTypes,
+	objectType: ObjectTypes,
+	destinationType: DestinationTypes
 }
 interface Message {
 	action: string;

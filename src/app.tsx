@@ -1,20 +1,24 @@
 import React, { FC, ReactNode, useEffect } from 'react';
 import ActionButton from './components/ActionButton';
 import { ObjectText, DestText, TriggerText, FocusText } from './components/StyledText';
-import { atom, useAtom, useAtomValue } from 'jotai'
+import { atom, useAtom, useAtomValue } from 'jotai';
+import { trackLaunchEvent, trackRedoEvent, trackRemoveInteractionsEvent, trackUndoEvent } from './connections/analytics';
+import InfoButton from './components/InfoButton';
+import SupportButton from './components/SupportButton';
+import SocialsButton from './components/SocialsButton';
 
 ///////////
 ///////////
 
 export type UserSelection = 'none' | 'boards';
-export type ObjectType = 'any objects' | 'components' | 'non-components' | 'boards';
-export type DestinationType = 'anywhere' | 'within the selection' | 'outside the selection' | 'overlays' | 'to previous screens' | 'to urls';
-export type TriggerType = 'any interactions' | 'clicks' | 'mouse enters' | 'mouse leaves' | 'after delays';
+export type ObjectTypes = 'any objects' | 'components' | 'non-components' | 'boards';
+export type DestinationTypes = 'anywhere' | 'within the selection' | 'outside the selection' | 'overlays' | 'to previous screens' | 'to urls';
+export type TriggerTypes = 'any interactions' | 'clicks' | 'mouse enters' | 'mouse leaves' | 'after delays';
 
 export const userSelectionAtom = atom<UserSelection>('none');
-export const triggerTypeAtom = atom<TriggerType>('any interactions');
-export const destinationTypeAtom = atom<DestinationType>('anywhere');
-export const objectTypeAtom = atom<ObjectType>('any objects');
+export const triggerTypeAtom = atom<TriggerTypes>('any interactions');
+export const destinationTypeAtom = atom<DestinationTypes>('anywhere');
+export const objectTypeAtom = atom<ObjectTypes>('any objects');
 
 interface AppProps {
     children?: ReactNode;
@@ -27,6 +31,7 @@ const App: FC<AppProps> = () => {
     const objectType = useAtomValue(objectTypeAtom);
 
     useEffect(() => {
+        trackLaunchEvent();
 
         window.addEventListener("message", (event) => {
             if(event.data.source !== "penpot") return;
@@ -43,7 +48,11 @@ const App: FC<AppProps> = () => {
         window.addEventListener("keydown", (event) => {
             if ((event.ctrlKey || event.metaKey) && event.key === 'z') {
                 event.preventDefault();
-                undoInPenpot();
+                if(event.shiftKey) {
+                    redoInPenpot();
+                } else {
+                    undoInPenpot();
+                }
             }
         });
 
@@ -99,15 +108,48 @@ const App: FC<AppProps> = () => {
                 <div
                     style={{
                         position: 'absolute',
-                        right: '0',
-                        bottom: '0',
+                        bottom: 0,
+                        right: 0,
+                        display: 'flex',
+                        // width: '100%',
+                        flexDirection: 'row',
+                        gap: '10px',
+                        // justifyContent: 'space-between',
                     }}
                 >
-                    <ActionButton
-                        onClick = {removeInteractions}
-                    >
-                        Strip 'em!
-                    </ActionButton>
+                    {/* <div
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            gap: '10px',
+                        }}
+                    > */}
+                        <InfoButton/>
+                        <ActionButton
+                            onClick = {removeInteractions}
+                        >
+                            Strip 'em!
+                        </ActionButton>
+                    {/* </div> */}
+                </div>
+            )}
+
+            {userSelection === 'none' && (
+                <div
+                    style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        right: 0,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        gap: '10px',
+                    }}
+                >
+                        <SupportButton/>
+                        <SocialsButton/>
                 </div>
             )}
         </div>
@@ -117,6 +159,13 @@ const App: FC<AppProps> = () => {
     ///////////////////
 
     function removeInteractions() {
+
+        trackRemoveInteractionsEvent({
+            objectTypes: objectType,
+            destinationTypes: destinationType,
+            triggerTypes
+        });	
+
         parent.postMessage({
             action: 'remove-interactions',
             data: {
@@ -128,8 +177,16 @@ const App: FC<AppProps> = () => {
     }
 
     function undoInPenpot() {
+        trackUndoEvent();
         parent.postMessage({
             action: 'undo',
+        }, '*');
+    }
+    
+    function redoInPenpot() {
+        trackRedoEvent();
+        parent.postMessage({
+            action: 'redo',
         }, '*');
     }
 }

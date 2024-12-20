@@ -1,12 +1,12 @@
 import { Shape } from "@penpot/plugin-types";
-import { TriggerType } from "../app";
+import { TriggerTypes } from "../app";
 
 ////////////////////////////
 ////////////////////////////
 
 interface RemoveInteractionsFilters {
     shapes: Shape[],
-    triggerTypes: TriggerType,
+    triggerTypes: TriggerTypes,
 }
 
 export function removeInteractions({shapes, triggerTypes}: RemoveInteractionsFilters) {
