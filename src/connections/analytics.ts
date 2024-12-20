@@ -76,14 +76,14 @@ async function trackEvent(name: string, properties: any = {}) {
         const encodedData = base64Encode(JSON.stringify(data));
         const url = `${MIXPANEL_API}?data=${encodedData}&ip=1`;
 
-        const response = await fetch(url, {
+        await fetch(url, {
             method: 'GET', // Note: Using GET instead of POST
             credentials: 'omit',
             mode: 'no-cors' // This is important
         });
 
         // Note: With no-cors we can't check response.ok
-        verbose(['Event tracked:', name, properties]);
+        // verbose(['Event tracked:', name, properties]);
     } catch (error) {
         verbose(['Error tracking event:', error]);
     }
@@ -91,7 +91,7 @@ async function trackEvent(name: string, properties: any = {}) {
 
 function base64Encode(str: string): string {
     return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
-        function toSolidBytes(match, p1) {
+        function toSolidBytes(_match, p1) {
             return String.fromCharCode(parseInt('0x' + p1));
         }));
 }
